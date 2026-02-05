@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+         User::factory(10)->create();
 
         User::factory()->create([
             'name' => 'Admin User',
@@ -33,5 +33,8 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now(),
             'role' => 'intern',
         ]);
+
+        $this->call([WeeklyReportsSeeder::class,]);
+        $this->call([DailyTimeRecordsSeeder::class,]);
     }
 }
