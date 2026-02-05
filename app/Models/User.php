@@ -57,4 +57,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(WeeklyReports::class);
     }
+
+    public function shift()
+    {
+        return $this->belongsTo(Shift::class);
+    }
 }
