@@ -25,7 +25,7 @@ class WeeklyReportsFactory extends Factory
             'submitted_at' => $this->faker->dateTime(),
             'viewed_at' => $this->faker->dateTime(),
             'certified_at' => $this->faker->dateTime(),
-            'certified_by' => User::where('role', 'admin')->first()->id,
+            'certified_by' => optional(User::where('role', 'admin')->first())->id,
             'signature' => $this->faker->imageUrl(),
             'entries' => json_encode([
                 'week_focus' => $this->faker->sentence(),

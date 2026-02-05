@@ -16,25 +16,29 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-         User::factory(10)->create();
+        //  User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
-            'email_verified_at' => now(),
-            'role' => 'admin',
-        ]);
+        // User::factory()->create([
+        //     'name' => 'Admin User',
+        //     'email' => 'admin@example.com',
+        //     'password' => Hash::make('password'),
+        //     'email_verified_at' => now(),
+        //     'role' => 'admin',
+        // ]);
 
-        User::factory()->create([
-            'name' => 'Intern User',
-            'email' => 'intern@example.com',
-            'password' => Hash::make('password'),
-            'email_verified_at' => now(),
-            'role' => 'intern',
-        ]);
+        // User::factory()->create([
+        //     'name' => 'Intern User',
+        //     'email' => 'intern@example.com',
+        //     'password' => Hash::make('password'),
+        //     'email_verified_at' => now(),
+        //     'role' => 'intern',
+        // ]);
 
         $this->call([WeeklyReportsSeeder::class,]);
         $this->call([DailyTimeRecordsSeeder::class,]);
+        $this->call([ShiftSeeder::class,]);
+        $this->call([UserSeeder::class,]);
+        $this->call([TestDtrLogsSeeder::class,]);
+        $this->call([AttendancesSeeder::class,]);
     }
 }
