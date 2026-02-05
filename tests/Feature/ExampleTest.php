@@ -1,7 +1,7 @@
 <?php
 
-test('the login page is accessible', function () {
-    $response = $this->get('/intern/login');
+test('the application returns a successful response', function () {
+    $response = $this->get('/');
 
     $response->assertStatus(200);
 });
