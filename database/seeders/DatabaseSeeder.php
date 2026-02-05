@@ -35,7 +35,10 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
-            WeeklyReportsSeeder::class,
+            ShiftSeeder::class,
+            UserSeeder::class,
+            TestDtrLogsSeeder::class,
+            WeeklyReportsSeeder::class
         ]);
     }
 }
