@@ -14,18 +14,14 @@ return new class extends Migration
         Schema::create('weekly_reports', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->unique();
-
-            $table->date('week_start')->unique();
+            $table->date('week_start');
             $table->date('week_end');
-
             $table->enum('status', ['pending', 'viewed', 'certified']);
-            $table->datetime('submitted_at')->nullable();
+            $table->datetime('submitted_at')->nullable();   
             $table->datetime('viewed_at')->nullable();
             $table->datetime('certified_at')->nullable();
-
-            $table->foreignId('certified_by')->constrained('users');
+            $table->foreignId('certified_by')->nullable()->constrained('users');
             $table->string('signature')->nullable();
-
             $table->json('entries')->nullable();
             $table->timestamps();
             $table->softDeletes();
