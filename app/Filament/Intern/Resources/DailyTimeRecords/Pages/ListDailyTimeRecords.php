@@ -10,8 +10,6 @@ use Filament\Resources\Pages\ListRecords;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
-use function Symfony\Component\Clock\now;
-
 class ListDailyTimeRecords extends ListRecords
 {
     protected static string $resource = DailyTimeRecordResource::class;
@@ -45,10 +43,10 @@ class ListDailyTimeRecords extends ListRecords
         $now = Carbon::now();
         $workDate = $this->getBusinessDate();
 
-        $s2End = Carbon::parse($workDate . ' ' . $shift->session_2_end);
+        $s2End = Carbon::parse($workDate.' '.$shift->session_2_end);
 
         // Handle night shift
-        $s1Start = Carbon::parse($workDate . ' ' . $shift->session_1_start);
+        $s1Start = Carbon::parse($workDate.' '.$shift->session_1_start);
         if ($s2End->lt($s1Start)) {
             $s2End->addDay();
         }
@@ -69,7 +67,7 @@ class ListDailyTimeRecords extends ListRecords
             }
         }
 
-        //disable button after 4 logs
+        // disable button after 4 logs
         return ($logCount <= 3) ? $logCount : 4;
     }
 
@@ -110,17 +108,17 @@ class ListDailyTimeRecords extends ListRecords
         $lateMinutes = 0;
         $workMinutes = 0;
 
-        //time in
+        // time in
         if ($type === 1) {
 
-            $s1Start = Carbon::parse($workDate . ' ' . $shift->session_1_start);
-            $s2Start = Carbon::parse($workDate . ' ' . $shift->session_2_start);
+            $s1Start = Carbon::parse($workDate.' '.$shift->session_1_start);
+            $s2Start = Carbon::parse($workDate.' '.$shift->session_2_start);
 
             if ($s2Start->lt($s1Start)) {
                 $s2Start->addDay();
             }
 
-            //check which session the user belongs
+            // check which session the user belongs
             $targetStart = null;
 
             // If current time is after session 2 start OR more than 4 hours after session 1 start
@@ -135,7 +133,7 @@ class ListDailyTimeRecords extends ListRecords
                 $lateMinutes = $now->diffInMinutes($targetStart);
             }
 
-            //time out
+            // time out
         } elseif ($type === 2) {
             $lastIn = DtrLog::where('user_id', $user->id)
                 ->where('work_date', $workDate)
@@ -149,19 +147,21 @@ class ListDailyTimeRecords extends ListRecords
 
                 // Use the date from the 'In' log to keep everything relative
                 $baseDate = $actualIn->format('Y-m-d');
-                
-                $s1Start = Carbon::parse($baseDate . ' ' . $shift->session_1_start);
-                $s1End = Carbon::parse($baseDate . ' ' . $shift->session_1_end);
-                $s2Start = Carbon::parse($baseDate . ' ' . $shift->session_2_start);
-                $s2End = Carbon::parse($baseDate . ' ' . $shift->session_2_end);
 
-                if ($s1End->lt($s1Start)) $s1End->addDay();
-                
+                $s1Start = Carbon::parse($baseDate.' '.$shift->session_1_start);
+                $s1End = Carbon::parse($baseDate.' '.$shift->session_1_end);
+                $s2Start = Carbon::parse($baseDate.' '.$shift->session_2_start);
+                $s2End = Carbon::parse($baseDate.' '.$shift->session_2_end);
+
+                if ($s1End->lt($s1Start)) {
+                    $s1End->addDay();
+                }
+
                 // Ensure S2 starts after S1 ends
                 while ($s2Start->lt($s1End)) {
                     $s2Start->addDay();
                 }
-                
+
                 // Ensure S2 ends after S2 starts
                 while ($s2End->lt($s2Start)) {
                     $s2End->addDay();

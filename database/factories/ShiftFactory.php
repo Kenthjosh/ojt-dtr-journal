@@ -17,12 +17,12 @@ class ShiftFactory extends Factory
     public function definition(): array
     {
         return [
-            //default day shift
+            // default day shift
             'name' => 'Day Shift',
             'session_1_start' => '08:00:00',
-            'session_1_end'   => '12:00:00',
+            'session_1_end' => '12:00:00',
             'session_2_start' => '13:00:00',
-            'session_2_end'   => '17:00:00',
+            'session_2_end' => '17:00:00',
         ];
     }
 }

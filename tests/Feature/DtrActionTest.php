@@ -82,7 +82,7 @@ it('allows first time in', function () {
     $this->actingAs($user);
 
     Carbon::setTestNow('2024-02-01 09:00:00');
-    
+
     Livewire::test(ListDailyTimeRecords::class)
         ->callAction('time_in');
 
@@ -240,7 +240,6 @@ it('allows time out after session end if user is still clocked in', function () 
         ->assertActionEnabled('time_out')  // Should still be able to leave
         ->assertActionDisabled('time_in'); // Should NOT be able to log back in
 });
-
 
 it('disables actions immediately after a late time out', function () {
     $shift = createDayShift();
