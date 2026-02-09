@@ -4,17 +4,19 @@ namespace App\Filament\Intern\Resources\DailyTimeRecords\Pages;
 
 use App\Filament\Intern\Resources\DailyTimeRecords\DailyTimeRecordResource;
 use App\Filament\Intern\Resources\DailyTimeRecords\Widgets\DtrStatsWidget;
-use Filament\Resources\Pages\ListRecords;
 use App\Models\DtrLog;
 use Filament\Actions\Action;
+use Filament\Resources\Pages\ListRecords;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use \Illuminate\Support\Carbon;
+
+use function Symfony\Component\Clock\now;
 
 class ListDailyTimeRecords extends ListRecords
 {
     protected static string $resource = DailyTimeRecordResource::class;
 
-    //function to get the date of the started shift
+    // function to get the date of the started shift
     protected function getBusinessDate(): string
     {
         $user = Auth::user();
@@ -34,7 +36,7 @@ class ListDailyTimeRecords extends ListRecords
         return $now->format('Y-m-d');
     }
 
-    //function to count how many logs exist for this specific busines date
+    // function to count how many logs exist for this specific busines date
     protected function getLogCount(): int
     {
 
@@ -71,7 +73,7 @@ class ListDailyTimeRecords extends ListRecords
         return ($logCount <= 3) ? $logCount : 4;
     }
 
-    //function for the action buttons
+    // function for the action buttons
     protected function getHeaderActions(): array
     {
         $logCount = $this->getLogCount();
@@ -82,18 +84,18 @@ class ListDailyTimeRecords extends ListRecords
                 ->Label('Time In')
                 ->color('success')
                 ->requiresConfirmation()
-                ->disabled(($logCount === 1 || $logCount === 3 || $logCount === 4))
-                ->action(fn() => $this->saveLog(1))
+                ->disabled(! ($logCount === 0 || $logCount === 2))
+                ->action(fn () => $this->saveLog(1))
                 ->successNotificationTitle('Clocked in successfully'),
 
-            //For time out
+            // For time out
             Action::make('time_out')
                 ->Label('Time Out')
                 ->color('info')
                 ->requiresConfirmation()
-                ->disabled(($logCount === 0 || $logCount === 2) || $logCount === 4)
-                ->action(fn() => $this->saveLog(2))
-                ->successNotificationTitle('Clocked out successfully')
+                ->disabled(! ($logCount === 1 || $logCount === 3))
+                ->action(fn () => $this->saveLog(2))
+                ->successNotificationTitle('Clocked out successfully'),
         ];
     }
 
@@ -187,11 +189,11 @@ class ListDailyTimeRecords extends ListRecords
         ]);
     }
 
-    //function to display the widgets
+    // function to display the widgets
     protected function getHeaderWidgets(): array
     {
         return [
-            DtrStatsWidget::class
+            DtrStatsWidget::class,
         ];
     }
 }

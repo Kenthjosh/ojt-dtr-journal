@@ -2,13 +2,12 @@
 
 namespace App\Filament\Intern\Resources\WeeklyReports\Schemas;
 
-use Filament\Schemas\Schema;
-
-use Filament\Infolists\Components\TextEntry;
-use Filament\Support\Enums\TextSize;
-use Filament\Infolists\Components\RepeatableEntry;
-use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
+use Filament\Support\Enums\TextSize;
 
 class WeeklyReportsInfolist
 {
@@ -37,9 +36,14 @@ class WeeklyReportsInfolist
                 ])
                 ->columns(3),
 
-            TextEntry::make('entries.week_focus')
-                ->size(TextSize::Medium)
-                ->belowLabel('What was your main focus this week? What skill or concept were you trying to improve?'),
+            Section::make('Week Focus')
+                ->description('If you had more time, what would you improve or change?')
+                ->schema([
+                    TextEntry::make('entries.week_focus')
+                        ->disablelabel()
+                        ->size(TextSize::Medium)
+                        ->html(),
+                ]),
 
             RepeatableEntry::make('entries.topics_learned')
                 ->belowLabel('List the topics, tools, or concepts you worked on this week.')
@@ -47,7 +51,7 @@ class WeeklyReportsInfolist
                 ->schema([
                     TextEntry::make('topic')
                         ->size(TextSize::Medium),
-                ]),
+                ])->grid(2),
 
             RepeatableEntry::make('entries.outputs_links')
                 ->label('Outputs and Links (REQUIRED)')
@@ -62,52 +66,61 @@ class WeeklyReportsInfolist
                         ->belowLabel('Each link must have a short description.')
                         ->label('Description')
                         ->size(TextSize::Medium),
+                ])->grid(2),
+
+            Section::make('WHAT YOU BUILT OR DESIGNED')
+                ->description('Describe what you created and what problem it was meant to solve')
+                ->schema([
+                    TextEntry::make('entries.what_built')
+                        ->disablelabel()
+                        ->size(TextSize::Medium)
+                        ->html(),
                 ]),
 
-            TextEntry::make('entries.what_built')
-                ->belowLabel('Describe what you created and what problem it was meant to solve.')
-                ->size(TextSize::Medium)
-                ->html(),
-
             Section::make('Decisions & Reasoning')
+                ->description('Explain at least two decisions you made this week.')
                 ->schema([
                     TextEntry::make('entries.decisions_reasoning.decision_1')
-                        ->aboveLabel('Explain at least two decisions you made this week.')
                         ->label('Decision 1')
                         ->size(TextSize::Medium),
 
                     TextEntry::make('entries.decisions_reasoning.decision_2')
                         ->label('Decision 2')
                         ->size(TextSize::Medium),
+                ])->columns(2),
+
+            Section::make('CHALLENGES & BLOCKERS')
+                ->description('What was difficult or confusing? What slowed you down?')
+                ->schema([
+                    TextEntry::make('entries.challenges_blockers')
+                        ->disablelabel()
+                        ->size(TextSize::Medium)
+                        ->html(),
                 ]),
 
-            TextEntry::make('entries.challenges_blockers')
-                ->label('Challenges and Blockers')
-                ->belowLabel('What was difficult or confusing? What slowed you down?')
-                ->size(TextSize::Medium)
-                ->html(),
-
             Section::make('What youd improve next time')
+                ->description('If you had more time, what would you improve or change?')
                 ->schema([
                     TextEntry::make('entries.improve_next_time.improvement_1')
-                        ->aboveLabel('Explain at least two decisions you made this week.')
                         ->label('Improvement 1')
                         ->size(TextSize::Medium),
 
                     TextEntry::make('entries.improve_next_time.improvement_2')
                         ->label('Improvement 2')
                         ->size(TextSize::Medium),
+                ])->columns(2),
+
+            Section::make('KEY TAKEAWAY OF THE WEEK')
+                ->description('What is the most important thing you learned this week? How will it change how you work next week?')
+                ->schema([
+                    TextEntry::make('entries.key_takeaway')
+                        ->disablelabel()
+                        ->size(TextSize::Medium)
+                        ->html(),
                 ]),
-
-            TextEntry::make('entries.key_takeaway')
-                ->label('Key Takeaway of the week')
-                ->belowLabel('What is the most important thing you learned this week? How will it change how you work next week?')
-                ->size(TextSize::Medium)
-                ->html(),
-
             ImageEntry::make('signature')
-            ->imageWidth(350)
-            ->imageHeight(200)
+                ->imageWidth(350)
+                ->imageHeight(200),
         ])->columns(1);
     }
 }

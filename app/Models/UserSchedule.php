@@ -11,6 +11,6 @@ class UserSchedule extends Model
         'user_id',
         'shift_id',
         'effective_from',
-        'effective_to'
+        'effective_to',
     ];
 }

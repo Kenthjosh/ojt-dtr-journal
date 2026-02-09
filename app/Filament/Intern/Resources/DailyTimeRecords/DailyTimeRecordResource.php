@@ -17,7 +17,9 @@ use Illuminate\Support\Facades\Auth;
 class DailyTimeRecordResource extends Resource
 {
     protected static ?string $pluralModelLabel = 'Daily Time Record';
+
     protected static ?string $model = DtrLog::class;
+
     protected static ?string $navigationLabel = 'Daily Time Record';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Clock;
@@ -50,7 +52,7 @@ class DailyTimeRecordResource extends Resource
         ];
     }
 
-    //function to filter the data for specific logged in user
+    // function to filter the data for specific logged in user
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()

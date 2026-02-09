@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('week_start');
             $table->date('week_end');
             $table->enum('status', ['pending', 'viewed', 'certified']);
-            $table->datetime('submitted_at')->nullable();   
+            $table->datetime('submitted_at')->nullable();
             $table->datetime('viewed_at')->nullable();
             $table->datetime('certified_at')->nullable();
             $table->foreignId('certified_by')->nullable()->constrained('users');

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Intern\Resources\WeeklyReports\Pages;
 
+use App\Filament\Actions\ExportCertifiedReportsAction;
 use App\Filament\Intern\Resources\WeeklyReports\WeeklyReportsResource;
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
@@ -14,7 +15,8 @@ class ViewWeeklyReports extends ViewRecord
     {
         return [
             EditAction::make()
-            ->hidden(fn ($record): bool => $record->status === 'certified'),
+                ->hidden(fn ($record): bool => $record->status === 'certified'),
+            ExportCertifiedReportsAction::make('Export'),
         ];
     }
 }

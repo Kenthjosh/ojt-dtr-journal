@@ -2,12 +2,11 @@
 
 namespace App\Filament\Intern\Resources\DailyTimeRecords\Tables;
 
+use App\Filament\Exports\DailyTimeRecordsExporter;
 use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
+use Filament\Actions\ExportBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Container\Attributes\Auth;
 
 class DailyTimeRecordsTable
 {
@@ -24,8 +23,8 @@ class DailyTimeRecordsTable
                     ->dateTime('h:i A'),
                 TextColumn::make('type')
                     ->badge()
-                    ->formatStateUsing(fn($state) => $state === 1 ? 'In' : 'Out')
-                    ->color(fn($state) => $state === 1 ? 'success' : 'warning')
+                    ->formatStateUsing(fn ($state) => $state === 1 ? 'In' : 'Out')
+                    ->color(fn ($state) => $state === 1 ? 'success' : 'warning'),
             ])->defaultSort('recorded_at', direction: 'desc')
             ->filters([
                 //
@@ -34,9 +33,14 @@ class DailyTimeRecordsTable
                 // EditAction::make(),
             ])
             ->toolbarActions([
-                // BulkActionGroup::make([
-                //     DeleteBulkAction::make(),
-                // ]),
+                BulkActionGroup::make([
+                    ExportBulkAction::make()
+                        ->label('Export Selected')
+                        ->icon('heroicon-o-archive-box-arrow-down')
+                        ->exporter(DailyTimeRecordsExporter::class)
+                        ->maxRows(500)
+                        ->columnMapping(false),
+                ]),
             ]);
     }
 }

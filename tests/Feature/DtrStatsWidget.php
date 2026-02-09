@@ -13,17 +13,26 @@ beforeEach(function () {
     Filament::setCurrentPanel(Filament::getPanel('intern'));
 });
 
-// Helper to create logs with minutes
-function createLog($user, $type, $date, $time, $workMins = 0, $lateMins = 0)
+// helper functions
+function createDayShift()
 {
-    return DtrLog::create([
-        'user_id' => $user->id,
-        'shift_id' => $user->shift_id,
-        'type' => $type,
-        'work_date' => $date,
-        'recorded_at' => "{$date} {$time}",
-        'work_minutes' => $workMins,
-        'late_minutes' => $lateMins,
+    return Shift::create([
+        'name' => 'Day',
+        'session_1_start' => '08:00:00',
+        'session_1_end' => '12:00:00',
+        'session_2_start' => '13:00:00',
+        'session_2_end' => '17:00:00',
+    ]);
+}
+
+function createNightShift()
+{
+    return Shift::create([
+        'name' => 'Night',
+        'session_1_start' => '20:00:00',
+        'session_1_end' => '00:00:00',
+        'session_2_start' => '01:00:00',
+        'session_2_end' => '05:00:00',
     ]);
 }
 
@@ -32,13 +41,46 @@ it('shows correct stats for a perfect 8-hour day', function () {
     $this->actingAs($user);
     $today = '2024-02-01';
 
-    // create 4 perfect time logs
-    createLog($user, 1, $today, '08:00:00');
-    createLog($user, 2, $today, '12:00:00', 240);
-    createLog($user, 1, $today, '13:00:00');
-    createLog($user, 2, $today, '17:00:00', 240);
+    // Morning: 08:00 - 12:00
+    DtrLog::create(
+        [
+            'user_id' => $user->id,
+            'type' => 1,
+            'work_date' => $today,
+            'recorded_at' => "{$today} 08:00:00",
+        ]
+    );
 
-    Livewire::test(DtrStatsWidget::class)
+    DtrLog::create(
+        [
+            'user_id' => $user->id,
+            'type' => 2,
+            'work_date' => $today,
+            'recorded_at' => "{$today} 12:00:00",
+        ]
+    );
+
+    // Afternoon: 13:00 - 17:00
+    DtrLog::create(
+        [
+            'user_id' => $user->id,
+            'type' => 1,
+            'work_date' => $today,
+            'recorded_at' => "{$today} 13:00:00",
+        ]
+    );
+
+    DtrLog::create(
+        [
+            'user_id' => $user->id,
+            'type' => 2,
+            'work_date' => $today,
+            'recorded_at' => "{$today} 17:00:00",
+        ]
+    );
+
+    // Test the Widget
+    \Livewire\Livewire::test(DtrStatsWidget::class)
         ->assertSee('8h 0m')
         ->assertSee('1')
         ->assertSee('0');
@@ -49,14 +91,46 @@ it('shows correct stats for a late day', function () {
     $this->actingAs($user);
     $today = '2024-02-01';
 
+    // Morning: 08:00 - 12:00
+    DtrLog::create(
+        [
+            'user_id' => $user->id,
+            'type' => 1,
+            'work_date' => $today,
+            'recorded_at' => "{$today} 08:10:00",
+        ]
+    );
 
-    // Wcreate for log with late
-    createLog($user, 1, $today, '08:10:00', 0, 10);
-    createLog($user, 2, $today, '12:00:00', 230);
-    createLog($user, 1, $today, '13:20:00', 0, 20);
-    createLog($user, 2, $today, '17:00:00', 220);
+    DtrLog::create(
+        [
+            'user_id' => $user->id,
+            'type' => 2,
+            'work_date' => $today,
+            'recorded_at' => "{$today} 12:00:00",
+        ]
+    );
 
-    Livewire::test(DtrStatsWidget::class)
+    // Afternoon: 13:00 - 17:00
+    DtrLog::create(
+        [
+            'user_id' => $user->id,
+            'type' => 1,
+            'work_date' => $today,
+            'recorded_at' => "{$today} 13:20:00",
+        ]
+    );
+
+    DtrLog::create(
+        [
+            'user_id' => $user->id,
+            'type' => 2,
+            'work_date' => $today,
+            'recorded_at' => "{$today} 17:00:00",
+        ]
+    );
+
+    // Test the Widget
+    \Livewire\Livewire::test(DtrStatsWidget::class)
         ->assertSee('7h 30m')
         ->assertSee('1')
         ->assertSee('30m');
@@ -67,13 +141,46 @@ it('shows correct stats for an undertime day', function () {
     $this->actingAs($user);
     $today = '2024-02-01';
 
-    // crete 4 lofs with undertime
-    createLog($user, 1, $today, '08:00:00');
-    createLog($user, 2, $today, '09:00:00', 60);
-    createLog($user, 1, $today, '13:00:00');
-    createLog($user, 2, $today, '17:00:00', 240);
+    // Morning: 08:00 - 12:00
+    DtrLog::create(
+        [
+            'user_id' => $user->id,
+            'type' => 1,
+            'work_date' => $today,
+            'recorded_at' => "{$today} 08:00:00",
+        ]
+    );
 
-    Livewire::test(DtrStatsWidget::class)
+    DtrLog::create(
+        [
+            'user_id' => $user->id,
+            'type' => 2,
+            'work_date' => $today,
+            'recorded_at' => "{$today} 09:00:00",
+        ]
+    );
+
+    // Afternoon: 13:00 - 17:00
+    DtrLog::create(
+        [
+            'user_id' => $user->id,
+            'type' => 1,
+            'work_date' => $today,
+            'recorded_at' => "{$today} 13:00:00",
+        ]
+    );
+
+    DtrLog::create(
+        [
+            'user_id' => $user->id,
+            'type' => 2,
+            'work_date' => $today,
+            'recorded_at' => "{$today} 17:00:00",
+        ]
+    );
+
+    // Test the Widget
+    \Livewire\Livewire::test(DtrStatsWidget::class)
         ->assertSee('5h 0m')
         ->assertSee('1')
         ->assertSee('0');

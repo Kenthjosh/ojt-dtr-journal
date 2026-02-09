@@ -23,7 +23,7 @@ it('a user cannot edit a report after certification', function () {
             'week_focus' => 'Initial Focus',
             'topics_learned' => ['Laravel'],
             'outputs_links' => [
-                ['url' => 'http://example.com', 'description' => 'Example link']
+                ['url' => 'http://example.com', 'description' => 'Example link'],
             ],
             'what_built' => 'Weekly report system',
             'decisions_reasoning' => ['decision_1' => 'A', 'decision_2' => 'B'],

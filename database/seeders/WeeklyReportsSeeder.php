@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\WeeklyReports;
+use Illuminate\Database\Seeder;
+
 class WeeklyReportsSeeder extends Seeder
 {
     /**

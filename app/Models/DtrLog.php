@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DtrLog extends Model
 {
-
     use HasFactory;
 
     // Table name
@@ -20,8 +19,6 @@ class DtrLog extends Model
         'type',
         'recorded_at',
         'work_date',
-        'work_minutes',
-        'late_minutes'
     ];
 
     public function shift()

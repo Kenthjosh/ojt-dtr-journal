@@ -23,19 +23,19 @@ it('a user can submit a weekly report', function () {
             'week_focus' => 'Learning Laravel',
             'topics_learned' => ['Eloquent', 'Filament forms'],
             'outputs_links' => [
-                ['url' => 'http://example.com', 'description' => 'Project link']
+                ['url' => 'http://example.com', 'description' => 'Project link'],
             ],
             'what_built' => 'Weekly journal system',
             'decisions_reasoning' => [
                 'decision_1' => 'Use JSON column for entries',
-                'decision_2' => 'Filament form for UI'
+                'decision_2' => 'Filament form for UI',
             ],
             'challenges_blockers' => 'Validation issues initially',
             'improve_next_time' => [
                 'improvement_1' => 'Add more UI guidance',
-                'improvement_2' => 'Use better validation messages'
+                'improvement_2' => 'Use better validation messages',
             ],
-            'key_takeaway' => 'Complex forms are manageable with Filament'
+            'key_takeaway' => 'Complex forms are manageable with Filament',
         ],
         'status' => 'pending',
     ]);

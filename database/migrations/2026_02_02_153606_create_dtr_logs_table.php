@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('dtr_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->tinyInteger('type')->comment('1=in, 2=out');
             $table->dateTime('recorded_at');
             $table->date('work_date');

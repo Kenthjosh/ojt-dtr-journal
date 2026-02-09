@@ -76,7 +76,7 @@ it('each outputs_links object must have url and description', function () {
             'week_focus' => 'Learning Laravel',
             'topics_learned' => ['Eloquent'],
             'outputs_links' => [
-                ['url' => 'http://example.com'] // missing description
+                ['url' => 'http://example.com'], // missing description
             ],
         ],
         'status' => 'pending',
@@ -96,7 +96,7 @@ it('what_built cannot be empty', function () {
             'week_focus' => 'Learning Laravel',
             'topics_learned' => ['Eloquent'],
             'outputs_links' => [
-                ['url' => 'http://example.com', 'description' => 'Project link']
+                ['url' => 'http://example.com', 'description' => 'Project link'],
             ],
             'what_built' => '',
         ],
@@ -117,11 +117,11 @@ it('decisions_reasoning must contain decision_1 and decision_2', function () {
             'week_focus' => 'Learning Laravel',
             'topics_learned' => ['Eloquent'],
             'outputs_links' => [
-                ['url' => 'http://example.com', 'description' => 'Project link']
+                ['url' => 'http://example.com', 'description' => 'Project link'],
             ],
             'what_built' => 'Weekly journal system',
             'decisions_reasoning' => [
-                'decision_1' => 'Use JSON column'
+                'decision_1' => 'Use JSON column',
                 // missing decision_2
             ],
         ],
@@ -142,12 +142,12 @@ it('challenges_blockers cannot be empty', function () {
             'week_focus' => 'Learning Laravel',
             'topics_learned' => ['Eloquent'],
             'outputs_links' => [
-                ['url' => 'http://example.com', 'description' => 'Project link']
+                ['url' => 'http://example.com', 'description' => 'Project link'],
             ],
             'what_built' => 'Weekly journal system',
             'decisions_reasoning' => [
                 'decision_1' => 'Use JSON column',
-                'decision_2' => 'Filament form for UI'
+                'decision_2' => 'Filament form for UI',
             ],
             'challenges_blockers' => '',
         ],
@@ -168,16 +168,16 @@ it('improve_next_time must contain improvement_1 and improvement_2', function ()
             'week_focus' => 'Learning Laravel',
             'topics_learned' => ['Eloquent'],
             'outputs_links' => [
-                ['url' => 'http://example.com', 'description' => 'Project link']
+                ['url' => 'http://example.com', 'description' => 'Project link'],
             ],
             'what_built' => 'Weekly journal system',
             'decisions_reasoning' => [
                 'decision_1' => 'Use JSON column',
-                'decision_2' => 'Filament form for UI'
+                'decision_2' => 'Filament form for UI',
             ],
             'challenges_blockers' => 'Some blockers',
             'improve_next_time' => [
-                'improvement_1' => 'Add more guidance'
+                'improvement_1' => 'Add more guidance',
                 // missing improvement_2
             ],
         ],
@@ -198,19 +198,19 @@ it('key_takeaway cannot be empty', function () {
             'week_focus' => 'Learning Laravel',
             'topics_learned' => ['Eloquent'],
             'outputs_links' => [
-                ['url' => 'http://example.com', 'description' => 'Project link']
+                ['url' => 'http://example.com', 'description' => 'Project link'],
             ],
             'what_built' => 'Weekly journal system',
             'decisions_reasoning' => [
                 'decision_1' => 'Use JSON column',
-                'decision_2' => 'Filament form for UI'
+                'decision_2' => 'Filament form for UI',
             ],
             'challenges_blockers' => 'Some blockers',
             'improve_next_time' => [
                 'improvement_1' => 'Add more guidance',
-                'improvement_2' => 'Better validation'
+                'improvement_2' => 'Better validation',
             ],
-            'key_takeaway' => ''
+            'key_takeaway' => '',
         ],
         'status' => 'pending',
     ]);
