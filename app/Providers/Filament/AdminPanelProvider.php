@@ -10,7 +10,6 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Support\Colors\Color;
 use Filament\Support\Facades\FilamentColor;
 use Filament\Widgets\AccountWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -28,6 +27,7 @@ class AdminPanelProvider extends PanelProvider
             'Day' => '#ffef08',
             'Night' => '#8f68e3',
         ]);
+
         return $panel
             ->default()
             ->id('admin')

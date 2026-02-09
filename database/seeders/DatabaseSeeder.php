@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Shift;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -16,34 +17,34 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
-        User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
-            'email_verified_at' => now(),
-            'role' => 'admin',
-        ]);
-
-        User::factory()->create([
-            'name' => 'Intern User',
-            'email' => 'intern@example.com',
-            'password' => Hash::make('password'),
-            'email_verified_at' => now(),
-            'role' => 'intern',
-        ]);
-
-        $this->call([
-            ShiftSeeder::class,
-            UserSeeder::class,
-            TestDtrLogsSeeder::class,
-            WeeklyReportsSeeder::class,
-            AttendancesSeeder::class,
-        ]);
-        $this->call([WeeklyReportsSeeder::class]);
         $this->call([ShiftSeeder::class]);
-        $this->call([TestDtrLogsSeeder::class]);
-        $this->call([AttendancesSeeder::class]);
-        $this->call([UserSeeder::class]);
+
+        $nightShiftId = Shift::where('name', 'Night Shift')->value('id');
+
+        User::updateOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'Admin User',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+                'role' => 'admin',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'intern@example.com'],
+            [
+                'name' => 'Intern User',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+                'role' => 'intern',
+                'shift_id' => $nightShiftId,
+            ]
+        );
+
+        // $this->call([UserSeeder::class]);
+        // $this->call([WeeklyReportsSeeder::class]);
+        // $this->call([TestDtrLogsSeeder::class]);
+        // $this->call([AttendancesSeeder::class]);
     }
 }

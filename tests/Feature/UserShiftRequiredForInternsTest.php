@@ -1,7 +1,6 @@
 <?php
 
-use App\Models\User;
-use App\Filament\Resources\Users\Pages\CreateUser;
+use App\Filament\Admin\Resources\Users\Pages\CreateUser;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 
@@ -16,10 +15,8 @@ test('Shift is a required field for interns', function () {
 });
 test('Shift is not a required field for admins', function () {
     Livewire::test(CreateUser::class)
-        ->set('data.role', 'admin')       
-        ->set('data.shift_id', null)      
-        ->call('create')                   
-        ->assertHasNoErrors(['data.shift_id']); 
+        ->set('data.role', 'admin')
+        ->set('data.shift_id', null)
+        ->call('create')
+        ->assertHasNoErrors(['data.shift_id']);
 });
-
-

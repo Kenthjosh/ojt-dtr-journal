@@ -14,7 +14,6 @@ test('certify button is disabled if report is already certified', function () {
     ]);
 
     Livewire::test(ViewWeeklyReports::class, ['record' => $report->id])
-        ->assertActionDisabled('certify'); 
-  
-});
+        ->assertActionDisabled('certify');
 
+});

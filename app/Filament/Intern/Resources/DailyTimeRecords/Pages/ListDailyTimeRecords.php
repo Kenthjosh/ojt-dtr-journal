@@ -19,6 +19,10 @@ class ListDailyTimeRecords extends ListRecords
     {
         $user = Auth::user();
         $now = Carbon::now();
+        if (! $user || ! $user->shift) {
+            return $now->format('Y-m-d');
+        }
+
         $shift = $user->shift;
 
         if ($shift) {
@@ -37,8 +41,11 @@ class ListDailyTimeRecords extends ListRecords
     // function to count how many logs exist for this specific busines date
     protected function getLogCount(): int
     {
-
         $user = Auth::user();
+        if (! $user || ! $user->shift) {
+            return 4;
+        }
+
         $shift = $user->shift;
         $now = Carbon::now();
         $workDate = $this->getBusinessDate();

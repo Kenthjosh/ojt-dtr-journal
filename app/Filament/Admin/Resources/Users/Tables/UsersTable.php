@@ -6,14 +6,11 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Tables\Columns\SelectColumn;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
-use Filament\Tables\Filters\Filter;
-use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\DatePicker;
-use Closure;
-use Tiptap\Marks\Bold;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class UsersTable
 {
@@ -39,10 +36,10 @@ class UsersTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('role')
-                ->colors([
-                    'warning' => 'admin',   
-                    'info'    => 'intern',      
-                ])
+                    ->colors([
+                        'warning' => 'admin',
+                        'info' => 'intern',
+                    ])
                     ->badge(),
                 TextColumn::make('shift_id')
                     ->label('Shift')
@@ -57,7 +54,7 @@ class UsersTable
                         1 => 'Day',   // yellow
                         2 => 'Night',
                         default => 'gray',
-                    })                    
+                    })
                     ->searchable(),
             ])
             ->filters([
@@ -68,12 +65,10 @@ class UsersTable
                     ])
                     ->query(function (Builder $query, array $data) {
                         return $query
-                        ->when(!empty($data['from']), fn($q) =>
-                            $q->whereDate('created_at', '>=', $data['from'])
-                        )
-                        ->when(!empty($data['until']), fn($q) =>
-                            $q->whereDate('created_at', '<=', $data['until'])
-                        );
+                            ->when(! empty($data['from']), fn ($q) => $q->whereDate('created_at', '>=', $data['from'])
+                            )
+                            ->when(! empty($data['until']), fn ($q) => $q->whereDate('created_at', '<=', $data['until'])
+                            );
                     }),
             ])
             ->recordActions([

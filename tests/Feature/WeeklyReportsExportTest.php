@@ -8,7 +8,6 @@ use App\Services\Exports\WeeklyReportsExportService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use ZipArchive;
 
 uses(RefreshDatabase::class);
@@ -33,16 +32,13 @@ it('Exports only certified reports into a zip', function () {
 
     $service = app(WeeklyReportsExportService::class);
 
-    $response = $service->exportCertifiedReports($certified);
+    $path = $service->exportCertifiedReports($certified);
 
-    expect($response)->toBeInstanceOf(BinaryFileResponse::class);
-
-    $zipPath = $response->getFile()->getPathname();
-
-    expect(file_exists($zipPath))->toBeTrue();
+    expect($path)->toBeString();
+    expect(file_exists($path))->toBeTrue();
 
     $zip = new ZipArchive;
-    $opened = $zip->open($zipPath);
+    $opened = $zip->open($path);
 
     expect($opened)->toBeTrue();
     expect($zip->numFiles)->toBe(2);
@@ -61,13 +57,14 @@ it('exports a docx file when one file is exported', function () {
 
     $service = app(WeeklyReportsExportService::class);
 
-    $response = $service->exportCertifiedReports(collect([$report]));
+    $path = $service->exportCertifiedReports(collect([$report]));
 
-    expect($response)->toBeInstanceOf(BinaryFileResponse::class);
+    $response = $this->get(
+        route('exports.download', ['path' => encrypt($path)])
+    );
 
-    $filePath = $response->getFile()->getPathname();
-    expect(file_exists($filePath))->toBeTrue();
-    expect(pathinfo($filePath, PATHINFO_EXTENSION))->toBe('docx');
+    $response->assertOk();
+    $response->assertHeader('content-disposition');
 });
 
 it('Displays the Export button in the Header Actions when called', function () {

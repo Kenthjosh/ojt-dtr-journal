@@ -5,6 +5,9 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Route;
 
+use function Pest\Laravel\actingAs;
+use function Pest\Laravel\get;
+
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
@@ -13,23 +16,25 @@ beforeEach(function () {
 });
 
 test('non admin users cannot access admin panel', function () {
+    /** @var User $user */
     $user = User::factory()->create([
         'role' => 'user',
     ]);
 
-    $response = $this->actingAs($user)
-        ->get('/admin-only-test');
+    actingAs($user);
+    $response = get('/admin-only-test');
 
     $response->assertForbidden();
 });
 
 test('admin users can pass through admin middleware', function () {
+    /** @var User $admin */
     $admin = User::factory()->create([
         'role' => 'admin',
     ]);
 
-    $response = $this->actingAs($admin)
-        ->get('/admin-only-test');
+    actingAs($admin);
+    $response = get('/admin-only-test');
 
     $response->assertOk()
         ->assertSee('OK');
