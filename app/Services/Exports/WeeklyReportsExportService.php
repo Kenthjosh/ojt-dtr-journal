@@ -14,8 +14,8 @@ class WeeklyReportsExportService
     {
         \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
         \PhpOffice\PhpWord\Settings::setDefaultPaper('Letter');
-        $zip = new ZipArchive();
-        $zipFileName = "weekly_reports" . uniqid() . ".zip";
+        $zip = new ZipArchive;
+        $zipFileName = 'weekly_reports'.uniqid().'.zip';
         $zipPath = storage_path("app/public/temp/{$zipFileName}");
 
         $reports = $reports->where('status', 'certified');

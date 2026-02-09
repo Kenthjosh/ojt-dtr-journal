@@ -12,7 +12,6 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Notifications\Collection;
 
 class WeeklyReportsTable
 {
@@ -86,7 +85,7 @@ class WeeklyReportsTable
             ])
             ->recordActions([
                 ViewAction::make()
-                ->color('info')
+                    ->color('info'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

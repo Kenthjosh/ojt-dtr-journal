@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Filament\Resources\WeeklyReports\Pages;
+namespace App\Filament\Admin\Resources\WeeklyReports\Pages;
 
-use App\Filament\Resources\WeeklyReports\WeeklyReportsResource;
-use Filament\Actions\Action;
-use Filament\Resources\Pages\ViewRecord;
-use App\Traits\LogsAdminAction;
 use App\Filament\Actions\ExportCertifiedReportsAction;
+use App\Filament\Admin\Resources\WeeklyReports\WeeklyReportsResource;
+use App\Traits\LogsAdminAction;
+use Filament\Actions\Action;
 use Filament\Actions\EditAction;
+use Filament\Resources\Pages\ViewRecord;
 
 class ViewWeeklyReports extends ViewRecord
 {
@@ -61,6 +61,7 @@ class ViewWeeklyReports extends ViewRecord
                     // Log the action
                     $this->logAdminAction('viewed', $record);
                 }),
+            EditAction::make(),
             ExportCertifiedReportsAction::make('Export'),
         ];
     }
