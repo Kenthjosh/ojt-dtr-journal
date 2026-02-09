@@ -34,7 +34,7 @@ class WeeklyReportsTable
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->date('M j, Y')
-                    ->label('Created')
+                    ->label('Submitted')
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('status')
