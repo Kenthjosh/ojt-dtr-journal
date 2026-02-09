@@ -19,7 +19,9 @@ class DtrLog extends Model
         'shift_id',
         'type',
         'recorded_at',
-        'work_date'
+        'work_date',
+        'work_minutes',
+        'late_minutes'
     ];
 
     public function shift()

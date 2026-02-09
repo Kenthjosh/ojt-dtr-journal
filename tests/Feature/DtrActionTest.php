@@ -204,3 +204,72 @@ it('disables clocking actions after two sessions are complete', function () {
         ->assertActionDisabled('time_in')
         ->assertActionDisabled('time_out');
 });
+
+it('disables actions after session end if user was absent', function () {
+    $shift = createDayShift();
+    $user = User::factory()->create(['shift_id' => $shift->id]);
+    $this->actingAs($user);
+
+    // Set time to 5:01 PM
+    Carbon::setTestNow('2024-02-01 17:01:00');
+
+    Livewire::test(ListDailyTimeRecords::class)
+        ->assertActionDisabled('time_in')
+        ->assertActionDisabled('time_out');
+});
+
+it('allows time out after session end if user is still clocked in', function () {
+    $shift = createDayShift();
+    $user = User::factory()->create(['shift_id' => $shift->id]);
+    $this->actingAs($user);
+
+    $today = '2024-02-01';
+
+    // User clocked in at 1:00 PM
+    DtrLog::create([
+        'user_id' => $user->id,
+        'shift_id' => $shift->id,
+        'type' => 1, // Time In
+        'recorded_at' => Carbon::parse("$today 13:00:00"),
+        'work_date' => $today,
+    ]);
+
+    // Current time is now 5:10 PM
+    Carbon::setTestNow("$today 17:10:00");
+
+    Livewire::test(ListDailyTimeRecords::class)
+        ->assertActionEnabled('time_out')  // Should still be able to leave
+        ->assertActionDisabled('time_in'); // Should NOT be able to log back in
+});
+
+
+it('disables actions immediately after a late time out', function () {
+    $shift = createDayShift();
+    $user = User::factory()->create(['shift_id' => $shift->id]);
+    $this->actingAs($user);
+
+    $today = '2024-02-01';
+
+    Carbon::setTestNow("$today 17:05:00");
+
+    DtrLog::factory()->create(['type' => 1, 'recorded_at' => "$today 08:00:00", 'user_id' => $user->id, 'work_date' => $today]);
+    DtrLog::factory()->create(['type' => 2, 'recorded_at' => "$today 12:00:00", 'user_id' => $user->id, 'work_date' => $today]);
+    DtrLog::factory()->create(['type' => 1, 'recorded_at' => "$today 13:00:00", 'user_id' => $user->id, 'work_date' => $today]);
+
+    // Mount the component
+    $lw = Livewire::test(ListDailyTimeRecords::class);
+
+    // Verify it is enabled initially
+    $lw->assertActionEnabled('time_out');
+
+    // Perform the action
+    $lw->callAction('time_out');
+
+    // Re-mount or Refresh the component to force getLogCount() to run again
+    Livewire::test(ListDailyTimeRecords::class)
+        ->assertActionDisabled('time_in')
+        ->assertActionDisabled('time_out');
+
+    // Double check the DB
+    $this->assertEquals(4, DtrLog::where('user_id', $user->id)->count());
+});
