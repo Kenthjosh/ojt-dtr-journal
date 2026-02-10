@@ -81,14 +81,16 @@ class WeeklyReportsTable
 
                                 return;
                             }
-
-                            app(WeeklyReportsExportService::class)
-                                ->exportCertifiedReports($reports);
                             Notification::make()
                                 ->title('Export Started')
                                 ->body('Your Export file is being generated...')
                                 ->success()
                                 ->send();
+                            $path = app(WeeklyReportsExportService::class)
+                                ->exportCertifiedReports($reports);
+                                return redirect()->route('exports.download', [
+                                    'path' => encrypt($path),
+                                ]);
                         }),
                 ]),
             ]);

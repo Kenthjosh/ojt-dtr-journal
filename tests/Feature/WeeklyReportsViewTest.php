@@ -14,4 +14,5 @@ test('mark viewed action is disabled for certified reports', function () {
 
     Livewire::test(ViewWeeklyReports::class, ['record' => $report->id])
         ->assertActionDisabled('certify');
+
 });

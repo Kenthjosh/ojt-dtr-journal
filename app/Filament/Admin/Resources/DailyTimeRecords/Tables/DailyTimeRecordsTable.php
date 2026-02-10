@@ -5,8 +5,11 @@ namespace App\Filament\Admin\Resources\DailyTimeRecords\Tables;
 use App\Filament\Exports\DailyTimeRecordsExporter;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\ExportBulkAction;
+use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class DailyTimeRecordsTable
 {
@@ -31,7 +34,18 @@ class DailyTimeRecordsTable
                     ->color(fn ($state) => $state === 1 ? 'success' : 'warning'),
             ])->defaultSort('recorded_at', direction: 'desc')
             ->filters([
-                //
+                Filter::make('week_range')
+                    ->form([
+                        DatePicker::make('from')->label('From'),
+                        DatePicker::make('until')->label('Until'),
+                    ])
+                    ->query(function (Builder $query, array $data) {
+                        $query
+                            ->when($data['from'] ?? null, fn ($query, $date) => $query->whereDate('week_start', '>=', $date)
+                            )
+                            ->when($data['until'] ?? null, fn ($query, $date) => $query->whereDate('week_end', '<=', $date)
+                            );
+                    }),
             ])
             ->recordActions([
                 // EditAction::make(),

@@ -42,16 +42,9 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // $this->call([
-        //     ShiftSeeder::class,
-        //     UserSeeder::class,
-        //     TestDtrLogsSeeder::class,
-        //     WeeklyReportsSeeder::class,
-        //     AttendancesSeeder::class,
-        // ]);
-        $this->call([UserSeeder::class]);
-        $this->call([WeeklyReportsSeeder::class]);
-        $this->call([TestDtrLogsSeeder::class]);
-        $this->call([AttendancesSeeder::class]);
+        // $this->call([UserSeeder::class]);
+        // $this->call([WeeklyReportsSeeder::class]);
+        // $this->call([TestDtrLogsSeeder::class]);
+        // $this->call([AttendancesSeeder::class]);
     }
 }

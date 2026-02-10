@@ -30,15 +30,18 @@ class ExportCertifiedReportsAction
 
                     return;
                 }
-
-                app(WeeklyReportsExportService::class)
-                    ->exportCertifiedReports(collect([$report]));
                 Notification::make()
                     ->title('File Successfully Exported!')
                     ->icon('heroicon-o-document-text')
                     ->iconColor('success')
                     ->success()
                     ->send();
+
+                $path = app(WeeklyReportsExportService::class)
+                    ->exportCertifiedReports(collect([$report]));
+                    return redirect()->route('exports.download', [
+                        'path' => encrypt($path),
+                    ]);
             });
     }
 }

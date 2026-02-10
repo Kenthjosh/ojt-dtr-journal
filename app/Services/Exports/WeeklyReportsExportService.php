@@ -208,12 +208,12 @@ class WeeklyReportsExportService
                 }
             }
 
-            return response()->download($zipPath)->deleteFileAfterSend(true);
+            return $zipPath;
 
         }
 
         if ($howMany == 1) {
-            return response()->download($tempPath)->deleteFileAfterSend(true);
+            return $tempPath;
         }
     }
 }
