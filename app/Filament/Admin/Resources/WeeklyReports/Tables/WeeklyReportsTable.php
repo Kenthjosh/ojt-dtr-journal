@@ -38,7 +38,8 @@ class WeeklyReportsTable
                         'viewed' => 'info',
                         'certified' => 'success',
                     }),
-                TextColumn::make('submitted_at')
+                TextColumn::make('updated_at')
+                    ->label('Submitted at')
                     ->dateTime()
                     ->sortable(),
                 TextColumn::make('viewed_at')
@@ -48,7 +49,8 @@ class WeeklyReportsTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
+
+                TextColumn::make('submitted_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

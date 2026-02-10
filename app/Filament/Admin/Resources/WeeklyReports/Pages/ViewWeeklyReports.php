@@ -39,6 +39,7 @@ class ViewWeeklyReports extends ViewRecord
 
                     // Log the action
                     $this->logAdminAction('certified', $record);
+                    $this->logAdminAction('viewed', $record);
                 }),
 
             Action::make('mark_viewed')
@@ -61,7 +62,7 @@ class ViewWeeklyReports extends ViewRecord
                     // Log the action
                     $this->logAdminAction('viewed', $record);
                 }),
-            EditAction::make(),
+            //EditAction::make(),
             ExportCertifiedReportsAction::make('Export'),
         ];
     }
