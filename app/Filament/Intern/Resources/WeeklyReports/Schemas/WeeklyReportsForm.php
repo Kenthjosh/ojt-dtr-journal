@@ -23,18 +23,34 @@ class WeeklyReportsForm
                     ->schema([
                         DatePicker::make('week_start')
                             ->native(false)
-                            ->maxDate(now())
-                            ->closeOnDateSelection()
                             ->label('Week Start')
-                            ->required(),
+                            ->required()
+                            ->closeOnDateSelection()
+                            ->maxDate(now())
+                            ->rule(function ($get) {
+                                return function ($attribute, $value, $fail) use ($get) {
+                                    $weekEnd = $get('week_end');
+                                    if ($weekEnd && \Carbon\Carbon::parse($value)->gt(\Carbon\Carbon::parse($weekEnd))) {
+                                        $fail('Week Start cannot be after Week End.');
+                                    }
+                                };
+                            }),
+
 
                         DatePicker::make('week_end')
                             ->native(false)
-                            ->maxDate(now())
-                            ->closeOnDateSelection()
                             ->label('Week End')
-                            ->required(),
-
+                            ->required()
+                            ->closeOnDateSelection()
+                            ->maxDate(now())
+                            ->rule(function ($get) {
+                                return function ($attribute, $value, $fail) use ($get) {
+                                    $weekStart = $get('week_start');
+                                    if ($weekStart && \Carbon\Carbon::parse($value)->lt(\Carbon\Carbon::parse($weekStart))) {
+                                        $fail('Week End cannot be before Week Start.');
+                                    }
+                                };
+                            }),
                         TextInput::make('journal_number')
                             ->label('Journal Number')
                             ->numeric()
@@ -45,6 +61,9 @@ class WeeklyReportsForm
                     ->columns(3),
 
                 RichEditor::make('entries.week_focus')
+                    ->toolbarButtons([
+                        ['bold', 'italic', 'underline', 'strike',],
+                    ])
                     ->helperText('What was your main focus this week? What skill or concept were you trying to improve?')
                     ->label('Week Focus')
                     ->required(),
@@ -56,6 +75,7 @@ class WeeklyReportsForm
                             ->helperText('List the topics, tools, or concepts you worked on this week.')
                             ->required(),
                     ])
+                    ->reorderable(false)
                     ->minItems(1),
 
                 Repeater::make('entries.outputs_links')
@@ -71,9 +91,13 @@ class WeeklyReportsForm
                             ->helperText('Each link must have a short description.')
                             ->label('Description')
                             ->required(),
-                    ]),
+                    ])
+                    ->reorderable(false),
 
                 RichEditor::make('entries.what_built')
+                    ->toolbarButtons([
+                        ['bold', 'italic', 'underline', 'strike',],
+                    ])
                     ->helperText('Describe what you created and what problem it was meant to solve.')
                     ->label('What you built or designed')
                     ->required(),
@@ -91,6 +115,9 @@ class WeeklyReportsForm
                     ]),
 
                 RichEditor::make('entries.challenges_blockers')
+                    ->toolbarButtons([
+                        ['bold', 'italic', 'underline', 'strike',],
+                    ])
                     ->helperText('What was difficult or confusing? What slowed you down?')
                     ->label('Challenges and Blockers')
                     ->required(),
@@ -108,6 +135,9 @@ class WeeklyReportsForm
                     ]),
 
                 RichEditor::make('entries.key_takeaway')
+                    ->toolbarButtons([
+                        ['bold', 'italic', 'underline', 'strike',],
+                    ])
                     ->helperText('What is the most important thing you learned this week? How will it change how you work next week?')
                     ->label('Key Takeaway of the week')
                     ->required(),

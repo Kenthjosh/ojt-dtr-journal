@@ -15,9 +15,40 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use UnitEnum;
+use Filament\GlobalSearch\GlobalSearchResult;
+use Illuminate\Support\Collection;
+use App\Models\WeeklyReport;
 
 class WeeklyReportsResource extends Resource
 {
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['user.name', 'status']; // change to a column that exists in your table
+    }
+
+    public static function getGlobalSearchResults(string $search): Collection
+    {
+        $searchLower = strtolower($search);
+        $results = collect();
+
+        // Search weekly reports by user name or status
+        $reports = WeeklyReports::whereHas('user', function ($q) use ($searchLower) {
+            $q->where('name', 'like', "%{$searchLower}%");
+        })
+        ->orWhere('status', 'like', "%{$searchLower}%")
+        ->get();
+
+        foreach ($reports as $report) {
+            $results->push(
+                new GlobalSearchResult(
+                    "Weekly Report: {$report->user->name} — {$report->status}",
+                    WeeklyReportsResource::getUrl('index', ['search' => $report->user->name])
+                )
+            );
+        }
+
+        return $results;
+    }
     protected static string|UnitEnum|null $navigationGroup = 'Reports';
 
     protected static ?int $navigationSort = 2;

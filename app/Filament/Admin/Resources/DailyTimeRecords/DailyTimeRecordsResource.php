@@ -13,9 +13,60 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use UnitEnum;
+use Filament\GlobalSearch\GlobalSearchResult;
+use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Builder;
+use App\Models\User;
 
 class DailyTimeRecordsResource extends Resource
 {
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        // Keep columns that exist in DB
+        return ['user.name'];
+    }
+
+
+    public static function getGlobalSearchResults(string $search): Collection
+    {
+        $searchLower = strtolower($search);
+
+        $results = collect();
+
+        // Only users that have at least one matching DTR log
+        $users = User::whereHas('dtrLogs', function ($q) use ($searchLower) {
+            $q->whereHas('user', fn($q2) => $q2->where('name', 'like', "%{$searchLower}%"));
+        })->get();
+
+        foreach ($users as $user) {
+            $results->push(
+                new GlobalSearchResult(
+                    "DTR Logs: {$user->name}",
+                    DailyTimeRecordsResource::getUrl('index', ['search' => $user->name])
+                )
+            );
+        }
+
+        return $results;
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        if (request()->filled('search')) {
+            $search = request('search');
+
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%');
+            });
+        }
+
+        return $query;
+    }
+    
+
     protected static string|UnitEnum|null $navigationGroup = 'Reports';
 
     protected static ?int $navigationSort = 1;

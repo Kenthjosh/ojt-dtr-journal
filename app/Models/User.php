@@ -20,6 +20,10 @@ class User extends Authenticatable implements FilamentUser
         };
     }
 
+    public function dtrLogs()
+    {
+        return $this->hasMany(\App\Models\DtrLog::class, 'user_id');
+    }
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
@@ -59,10 +63,6 @@ class User extends Authenticatable implements FilamentUser
         ];
     }
 
-    public function attendances(): HasMany
-    {
-        return $this->hasMany(Attendances::class);
-    }
 
     public function weeklyReports(): HasMany
     {

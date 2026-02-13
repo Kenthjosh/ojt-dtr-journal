@@ -19,6 +19,11 @@ use UnitEnum;
 
 class AdminActivitiesResource extends Resource
 {
+    public static function getGloballySearchableAttributes(): array
+    {
+        // Keep columns that exist in DB
+        return ['user.name'];
+    }
     protected static string|UnitEnum|null $navigationGroup = 'Administration';
 
     protected static ?int $navigationSort = 2;

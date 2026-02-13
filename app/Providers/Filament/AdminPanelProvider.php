@@ -19,9 +19,23 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Filament\Facades\Filament;
 
 class AdminPanelProvider extends PanelProvider
 {
+    public function register(): void
+    {
+        parent::register();
+
+        Filament::serving(function () {
+            Filament::registerRenderHook(
+                'global-search.input',
+                fn () => view('filament::components.global-search-input', [
+                    'placeholder' => 'Search a name',
+                ])
+            );
+        });
+    }
     public function panel(Panel $panel): Panel
     {
         FilamentColor::register([

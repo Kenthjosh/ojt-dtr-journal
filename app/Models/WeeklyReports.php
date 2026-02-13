@@ -29,6 +29,11 @@ class WeeklyReports extends Model
         'journal_number',
     ];
 
+    public function userWeeklyReports()
+    {
+        return $this->belongsTo(\App\Models\User::class);
+    }
+
     // Cast entries as array
     protected $casts = [
         'entries' => 'array',

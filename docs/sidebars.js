@@ -2,6 +2,7 @@ export default {
   tutorialSidebar: [
     'Daily Time Record',
     'Weekly Journal',
-    'Export Feature'
+    'Admin Certification and Audit Logs',
+    'Export Feature',
   ],
 };

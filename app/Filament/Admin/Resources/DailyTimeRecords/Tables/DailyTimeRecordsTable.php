@@ -41,9 +41,9 @@ class DailyTimeRecordsTable
                     ])
                     ->query(function (Builder $query, array $data) {
                         $query
-                            ->when($data['from'] ?? null, fn ($query, $date) => $query->whereDate('week_start', '>=', $date)
+                            ->when($data['from'] ?? null, fn ($query, $date) => $query->whereDate('created_at', '>=', $date)
                             )
-                            ->when($data['until'] ?? null, fn ($query, $date) => $query->whereDate('week_end', '<=', $date)
+                            ->when($data['until'] ?? null, fn ($query, $date) => $query->whereDate('created_at', '<=', $date)
                             );
                     }),
             ])

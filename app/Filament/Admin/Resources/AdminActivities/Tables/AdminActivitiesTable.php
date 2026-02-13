@@ -25,7 +25,7 @@ class AdminActivitiesTable
                 TextColumn::make('action')
                     ->searchable(),
                 TextColumn::make('subject_id')
-                    ->label('Report id')
+                    ->label('Subject id')
                     ->numeric()
                     ->sortable(),
             ])

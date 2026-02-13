@@ -22,26 +22,32 @@ class UserForm
                         TextInput::make('email')
                             ->label('Email address')
                             ->email()
-                            ->required(),
+                            ->required()
+                            ->unique(ignoreRecord:true),
                         // DateTimePicker::make('email_verified_at')
                         //     ->label('Email Verification Date'),
                         TextInput::make('password')
-                            ->password()
-                            ->revealable() // 👁 show / hide toggle
-                            ->label('New Password')
-                            ->helperText('Leave blank to keep the current password')
-                            ->dehydrateStateUsing(fn ($state) => Hash::make($state))
-                            ->dehydrated(fn ($state) => filled($state))
-                            ->required(false),
+                        ->password()
+                        ->revealable()
+                        ->label(fn ($operation) => $operation === 'create' ? 'Password' : 'New Password')
+                        ->helperText(fn ($operation) =>
+                            $operation === 'edit'
+                                ? 'Leave blank to keep the current password'
+                                : null
+                        )
+                        ->required(fn ($operation) => $operation === 'create')
+                        ->dehydrateStateUsing(fn ($state) => filled($state) ? Hash::make($state) : null)
+                        ->dehydrated(fn ($state) => filled($state)),
                         Select::make('role')
                             ->options(['intern' => 'Intern', 'admin' => 'Admin'])
                             ->default('intern')
                             ->native(false)
+                            
                             ->reactive()
                             ->required(),
                         Select::make('shift_id')
                             ->label('Shift')
-                            ->options([1 => 'Day Shift', 2 => 'Night Shift'])
+                            ->options([1 => 'Day Shift', 2 => 'Night Shift', 3 => 'Mid Shift'])
                             ->native(false)
                             ->default(null)
                             ->required(fn ($get) => $get('role') === 'intern'),

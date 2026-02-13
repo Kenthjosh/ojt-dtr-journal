@@ -17,7 +17,7 @@ return new class extends Migration
             $table->timestamps();
             $table->string('subject_type', 191);
             $table->enum('action', ['edited', 'viewed', 'certified', 'deleted']);
-            $table->foreignId('subject_id');
+            $table->foreignId('subject_id')->cascadeOnDelete();
             $table->index(['subject_type', 'subject_id']);
         });
     }

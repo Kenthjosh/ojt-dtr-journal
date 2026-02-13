@@ -23,20 +23,20 @@ class WeeklyReportsTable
                 TextColumn::make('journal_number')
                     ->size(TextSize::Medium)
                     ->label('Journal Number')
-                    ->searchable(),
+                    ->searchable(query: function ($query, $search) {
+                        return $query->where('journal_number', $search);
+                    }),
                 TextColumn::make('week_start')
                     ->date('M j, Y')
                     ->label('Week start')
                     ->searchable(),
                 TextColumn::make('week_end')
                     ->date('M j, Y')
-                    ->label('Week end')
-                    ->searchable(),
+                    ->label('Week end'),
                 TextColumn::make('created_at')
                     ->date('M j, Y')
                     ->label('Submitted')
-                    ->sortable()
-                    ->searchable(),
+                    ->sortable(),
                 TextColumn::make('status')
                     ->badge()
                     ->searchable()

@@ -16,6 +16,9 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use UnitEnum;
+use Illuminate\Support\Collection;
+use Filament\GlobalSearch\GlobalSearchResult;
+
 
 class UserResource extends Resource
 {
@@ -42,6 +45,48 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return UsersTable::configure($table);
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        // Keep columns that exist in DB
+        return ['name', 'email', 'role', 'shift_id'];
+    }
+
+    /**
+     * Map textual shift search to numeric shift_id
+     */
+    public static function getGlobalSearchResults(string $search): Collection
+    {
+        $searchLower = strtolower($search);
+    
+        $shiftMap = [
+            'day shift' => 1,
+            'night shift' => 2,
+            'mid shift' => 3,
+        ];
+    
+        return User::query()
+            ->where(function ($q) use ($searchLower, $shiftMap) {
+                $q->where('name', 'like', "%{$searchLower}%")
+                  ->orWhere('email', 'like', "%{$searchLower}%")
+                  ->orWhere('role', 'like', "%{$searchLower}%");
+    
+                if (isset($shiftMap[$searchLower])) {
+                    $q->orWhere('shift_id', $shiftMap[$searchLower]);
+                }
+            })
+            ->limit(50)
+            ->get()
+            ->map(function ($user) use ($shiftMap) {
+                $shiftText = array_search($user->shift_id, $shiftMap);
+    
+                // v5: pass arguments positionally, no named parameters
+                return new GlobalSearchResult(
+                    $user->name . ' — ' . $shiftText, // title/label
+                    static::getUrl('view', ['record' => $user]) // URL to the record
+                );
+            });
     }
 
     public static function getRelations(): array

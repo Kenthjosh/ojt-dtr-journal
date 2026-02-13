@@ -42,9 +42,8 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // $this->call([UserSeeder::class]);
-        // $this->call([WeeklyReportsSeeder::class]);
-        // $this->call([TestDtrLogsSeeder::class]);
-        // $this->call([AttendancesSeeder::class]);
+        $this->call([UserSeeder::class]);
+        $this->call([WeeklyReportsSeeder::class]);
+        $this->call([TestDtrLogsSeeder::class]);
     }
 }

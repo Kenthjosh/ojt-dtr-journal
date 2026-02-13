@@ -48,11 +48,13 @@ class UsersTable
                     ->formatStateUsing(fn (int $state) => match ($state) {
                         1 => 'Day Shift',
                         2 => 'Night Shift',
+                        3 => 'Mid Shift',
                         default => ucfirst($state),
                     })
                     ->color(fn (int $state) => match ($state) {
                         1 => 'Day',   // yellow
                         2 => 'Night',
+                        3 => 'warning',
                         default => 'gray',
                     })
                     ->searchable(),
