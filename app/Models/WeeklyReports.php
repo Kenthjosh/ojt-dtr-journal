@@ -27,6 +27,8 @@ class WeeklyReports extends Model
         'signature',
         'entries',
         'journal_number',
+        'track',
+        'work_category',
     ];
 
     public function userWeeklyReports()

@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('weekly_reports', function (Blueprint $table) {
@@ -23,16 +20,15 @@ return new class extends Migration
             $table->foreignId('certified_by')->nullable()->constrained('users');
             $table->string('signature')->nullable();
             $table->json('entries')->nullable();
+            $table->string('work_category')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('weekly_reports');
     }
 };
+

@@ -33,8 +33,18 @@ class WeeklyReportsInfolist
                         ->size(TextSize::Large)
                         ->columnSpan(1)
                         ->label('Journal Number'),
+                        
+                    TextEntry::make('work_category')
+                        ->label('Work Category')
+                        ->size(TextSize::Medium)
+                        ->formatStateUsing(fn ($state) => match($state) {
+                            'development' => 'Development',
+                            'designer' => 'Designer',
+                            'mixed' => 'Mixed',
+                            default => $state,
+                        }),
                 ])
-                ->columns(3),
+                ->columns(4),
 
             Section::make('Week Focus')
                 ->description('If you had more time, what would you improve or change?')
@@ -60,7 +70,7 @@ class WeeklyReportsInfolist
                         ->belowLabel('Provide direct links to your work.')
                         ->label('URL')
                         ->size(TextSize::Medium)
-                        ->url(fn ($state) => $state)
+                        ->url(fn($state) => $state)
                         ->openUrlInNewTab(),
                     TextEntry::make('description')
                         ->belowLabel('Each link must have a short description.')

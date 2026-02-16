@@ -45,5 +45,6 @@ class DatabaseSeeder extends Seeder
         $this->call([UserSeeder::class]);
         $this->call([WeeklyReportsSeeder::class]);
         $this->call([TestDtrLogsSeeder::class]);
+        $this->call([WorkCategorySeeder::class]);
     }
 }

@@ -12,6 +12,8 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Storage;
 use Saade\FilamentAutograph\Forms\Components\SignaturePad;
+use Filament\Forms\Components\Select;
+use App\Models\WorkCategory;
 
 class WeeklyReportsForm
 {
@@ -57,8 +59,30 @@ class WeeklyReportsForm
                             ->required()
                             ->minValue(1)
                             ->required(),
+
+
+                        Select::make('work_category')
+                            ->label('Work Category')
+                            ->options(fn() => WorkCategory::pluck('name', 'name')->toArray())
+                            ->searchable()
+                            ->required()
+                            ->createOptionForm([
+                                TextInput::make('new_category')
+                                    ->label('Add New Category')
+                                    ->required(),
+                            ])
+                            ->createOptionUsing(function (array $data) {
+                                $category = WorkCategory::firstOrCreate([
+                                    'name' => $data['new_category'],
+                                    'created_by' => auth()->id(),
+                                ]);
+
+                                return $category->name; 
+                            })
+                            ->placeholder('Select category'),
+
                     ])
-                    ->columns(3),
+                    ->columns(4),
 
                 RichEditor::make('entries.week_focus')
                     ->toolbarButtons([
@@ -142,15 +166,15 @@ class WeeklyReportsForm
                     ->label('Key Takeaway of the week')
                     ->required(),
 
-                    SignaturePad::make('signature')
+                SignaturePad::make('signature')
                     ->label(__('Sign here'))
                     ->required()
                     ->confirmable()
-                    ->backgroundColor('#1f2937')       
-                    ->backgroundColorOnDark('#111827') 
-                    ->penColor('#ffffff')              
-                    ->penColorOnDark('#ffffff')       
-                    ->exportPenColor('#000000')        
+                    ->backgroundColor('#1f2937')
+                    ->backgroundColorOnDark('#111827')
+                    ->penColor('#ffffff')
+                    ->penColorOnDark('#ffffff')
+                    ->exportPenColor('#000000')
                     ->dotSize(2.0)
                     ->lineMinWidth(0.5)
                     ->lineMaxWidth(2.5)
@@ -162,13 +186,13 @@ class WeeklyReportsForm
                             // Decode Base64
                             $imageData = explode(',', $state)[1];
                             $image = base64_decode($imageData);
-                
+
                             // Create a unique filename
                             $fileName = 'signatures/signature_' . time() . '.png';
-                
+
                             // Save file to storage/app/signatures
                             Storage::put($fileName, $image);
-                
+
                             // Replace state with the file path
                             $set('signature', $fileName);
                         }
