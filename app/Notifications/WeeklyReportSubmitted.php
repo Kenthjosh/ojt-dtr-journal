@@ -3,41 +3,33 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
-use Illuminate\Notifications\Messages\DatabaseMessage;
 use App\Models\WeeklyReports;
 
-class WeeklyReportSubmitted extends Notification
+class WeeklyReportSubmitted extends Notification implements ShouldQueue
 {
     use Queueable;
 
     protected WeeklyReports $report;
 
-    /**
-     * Create a new notification instance.
-     */
     public function __construct(WeeklyReports $report)
     {
         $this->report = $report;
     }
 
-    /**
-     * Only database channel for this notification.
-     */
     public function via($notifiable): array
     {
         return ['database'];
     }
 
-    /**
-     * Store data in the database.
-     */
     public function toDatabase($notifiable): array
     {
         return [
             'report_id'   => $this->report->id,
-            'intern_name' => $this->report->user->name,
+            'intern_name' => optional($this->report->user)->name ?? 'Unknown Intern',
             'message'     => 'A new weekly report has been submitted.',
+            'url'         => route('filament.admin.resources.weekly-reports.edit', $this->report->id),
         ];
     }
 }

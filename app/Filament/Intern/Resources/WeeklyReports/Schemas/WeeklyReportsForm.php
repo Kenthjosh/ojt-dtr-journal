@@ -142,10 +142,15 @@ class WeeklyReportsForm
                     ->label('Key Takeaway of the week')
                     ->required(),
 
-                SignaturePad::make('signature')
+                    SignaturePad::make('signature')
                     ->label(__('Sign here'))
-                ->required()
-                ->confirmable()
+                    ->required()
+                    ->confirmable()
+                    ->backgroundColor('#1f2937')       
+                    ->backgroundColorOnDark('#111827') 
+                    ->penColor('#ffffff')              
+                    ->penColorOnDark('#ffffff')       
+                    ->exportPenColor('#000000')        
                     ->dotSize(2.0)
                     ->lineMinWidth(0.5)
                     ->lineMaxWidth(2.5)
@@ -157,17 +162,17 @@ class WeeklyReportsForm
                             // Decode Base64
                             $imageData = explode(',', $state)[1];
                             $image = base64_decode($imageData);
-
-                    // Create a unique filename
-                    $fileName = 'signatures/signature_' . time() . '.png';
-
+                
+                            // Create a unique filename
+                            $fileName = 'signatures/signature_' . time() . '.png';
+                
                             // Save file to storage/app/signatures
                             Storage::put($fileName, $image);
-
+                
                             // Replace state with the file path
                             $set('signature', $fileName);
                         }
-                }),
+                    }),
             ])->columns(1);
     }
 }

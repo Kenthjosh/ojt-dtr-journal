@@ -6,8 +6,7 @@ use App\Filament\Intern\Resources\WeeklyReports\WeeklyReportsResource;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use App\Notifications\WeeklyReportSubmitted; // Make sure you have this notification
-
+use Filament\Notifications\Notification as FilamentNotification;
 class CreateWeeklyReports extends CreateRecord
 {
     protected static string $resource = WeeklyReportsResource::class;
@@ -25,14 +24,24 @@ class CreateWeeklyReports extends CreateRecord
         return false;
     }
 
-    // This runs AFTER the record is created
+    // Runs AFTER the record is created
     protected function afterCreate(): void
     {
-        // Get the admin users (you can filter by role if you have one)
         $admins = User::where('role', 'admin')->get();
 
         foreach ($admins as $admin) {
-            $admin->notify(new WeeklyReportSubmitted($this->record));
+            FilamentNotification::make()
+                ->title('Weekly Report Submitted!')
+                ->body('A new weekly report has been submitted by ' . optional($this->record->user)->name)
+                ->success()
+                ->sendToDatabase($admin);
         }
+
+        // Optional: intern toast
+        FilamentNotification::make()
+            ->title('Report Submitted!')
+            ->body('All admins have been notified.')
+            ->success()
+            ->send();
     }
 }
