@@ -11,31 +11,32 @@ use function Pest\Laravel\get;
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    Route::middleware(EnsureAdminUser::class)
-        ->get('/admin-only-test', fn () => 'OK');
+    Route::middleware(EnsureAdminUser::class)->get(
+        "/admin-only-test",
+        fn() => "OK",
+    );
 });
 
-test('non admin users cannot access admin panel', function () {
+test("non admin users cannot access admin panel", function () {
     /** @var User $user */
     $user = User::factory()->create([
-        'role' => 'user',
+        "role" => "intern",
     ]);
 
     actingAs($user);
-    $response = get('/admin-only-test');
+    $response = get("/admin-only-test");
 
     $response->assertForbidden();
 });
 
-test('admin users can pass through admin middleware', function () {
+test("admin users can pass through admin middleware", function () {
     /** @var User $admin */
     $admin = User::factory()->create([
-        'role' => 'admin',
+        "role" => "admin",
     ]);
 
     actingAs($admin);
-    $response = get('/admin-only-test');
+    $response = get("/admin-only-test");
 
-    $response->assertOk()
-        ->assertSee('OK');
+    $response->assertOk()->assertSee("OK");
 });

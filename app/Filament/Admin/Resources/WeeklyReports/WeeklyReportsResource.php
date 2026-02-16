@@ -23,7 +23,7 @@ class WeeklyReportsResource extends Resource
 {
     public static function getGloballySearchableAttributes(): array
     {
-        return ['user.name', 'status']; // change to a column that exists in your table
+        return ["user.name", "status"]; // change to a column that exists in your table
     }
 
     public static function getGlobalSearchResults(string $search): Collection
@@ -32,24 +32,28 @@ class WeeklyReportsResource extends Resource
         $results = collect();
 
         // Search weekly reports by user name or status
-        $reports = WeeklyReports::whereHas('user', function ($q) use ($searchLower) {
-            $q->where('name', 'like', "%{$searchLower}%");
+        $reports = WeeklyReports::whereHas("user", function ($q) use (
+            $searchLower,
+        ) {
+            $q->where("name", "like", "%{$searchLower}%");
         })
-        ->orWhere('status', 'like', "%{$searchLower}%")
-        ->get();
+            ->orWhere("status", "like", "%{$searchLower}%")
+            ->get();
 
         foreach ($reports as $report) {
             $results->push(
                 new GlobalSearchResult(
                     "Weekly Report: {$report->user->name} — {$report->status}",
-                    WeeklyReportsResource::getUrl('index', ['search' => $report->user->name])
-                )
+                    WeeklyReportsResource::getUrl("index", [
+                        "search" => $report->user->name,
+                    ]),
+                ),
             );
         }
 
         return $results;
     }
-    protected static string|UnitEnum|null $navigationGroup = 'Reports';
+    protected static string|UnitEnum|null $navigationGroup = "Reports";
 
     protected static ?int $navigationSort = 2;
 
@@ -57,7 +61,7 @@ class WeeklyReportsResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
 
-    protected static ?string $recordTitleAttribute = 'WeeklyReports';
+    protected static ?string $recordTitleAttribute = "WeeklyReports";
 
     public static function form(Schema $schema): Schema
     {
@@ -77,16 +81,16 @@ class WeeklyReportsResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
-        ];
+                //
+            ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => ListWeeklyReports::route('/'),
-            'view' => ViewWeeklyReports::route('/{record}'),
-            'edit' => EditWeeklyReports::route('/{record}/edit'),
+            "index" => ListWeeklyReports::route("/"),
+            "view" => ViewWeeklyReports::route("/{record}"),
+            "edit" => EditWeeklyReports::route("/{record}/edit"),
         ];
     }
 }

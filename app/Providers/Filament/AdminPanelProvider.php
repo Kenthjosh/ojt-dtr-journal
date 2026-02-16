@@ -29,41 +29,49 @@ class AdminPanelProvider extends PanelProvider
 
         Filament::serving(function () {
             Filament::registerRenderHook(
-                'global-search.input',
-                fn () => view('filament::components.global-search-input', [
-                    'placeholder' => 'Search a name',
-                ])
+                "global-search.input",
+                fn() => view("filament::components.global-search-input", [
+                    "placeholder" => "Search a name",
+                ]),
             );
         });
     }
     public function panel(Panel $panel): Panel
     {
         FilamentColor::register([
-            'Day' => '#ffef08',
-            'Night' => '#8f68e3',
+            "Day" => "#ffef08",
+            "Night" => "#8f68e3",
         ]);
 
         return $panel
 
             // for docs
             ->navigationItems([
-                NavigationItem::make('User Guide')
-                    ->url('/docs', shouldOpenInNewTab: true)
-                    ->icon('heroicon-o-book-open')
-                    ->group('External'),
+                NavigationItem::make("User Guide")
+                    ->url("/docs", shouldOpenInNewTab: true)
+                    ->icon("heroicon-o-book-open")
+                    ->group("External"),
             ])
 
             ->default()
-            ->id('admin')
-            ->path('/admin')
+            ->id("admin")
+            ->path("/admin")
             ->login()
             ->spa()
-            ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\Filament\Admin\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
-            ->pages([
-                Dashboard::class,
-            ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
+
+            ->discoverResources(
+                in: app_path("Filament/Admin/Resources"),
+                for: "App\Filament\Admin\Resources",
+            )
+            ->discoverPages(
+                in: app_path("Filament/Pages"),
+                for: "App\Filament\Pages",
+            )
+            ->pages([Dashboard::class])
+            ->discoverWidgets(
+                in: app_path("Filament/Widgets"),
+                for: "App\Filament\Widgets",
+            )
             ->widgets([
                 AccountWidget::class,
                 // FilamentInfoWidget::class,
@@ -80,10 +88,8 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
-            ->authMiddleware([
-                Authenticate::class,
-            ])
+            ->authMiddleware([Authenticate::class])
             ->databaseNotifications()
-            ->databaseNotificationsPolling('30s');
+            ->databaseNotificationsPolling("30s");
     }
 }

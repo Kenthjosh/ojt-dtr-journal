@@ -35,7 +35,8 @@ class WeeklyReportsInfolist
                             }),
                         TextEntry::make('week_end')
                             ->date(),
-                        TextEntry::make('submitted_at')
+                        TextEntry::make('created_at')
+                            ->label('Submitted at')
                             ->dateTime()
                             ->placeholder('-'),
                         TextEntry::make('viewed_at')
