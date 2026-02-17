@@ -50,7 +50,7 @@ class WeeklyReports extends Model
 
     public function workCategory()
     {
-        return $this->belongsTo(WorkCategory::class);
+        return $this->belongsTo(WorkCategory::class, 'work_category');
     }
 
     protected $table = "weekly_reports";
@@ -182,3 +182,4 @@ class WeeklyReports extends Model
         return $this->entries ?? [];
     }
 }
+

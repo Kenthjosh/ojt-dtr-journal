@@ -62,19 +62,28 @@ class WeeklyReportsExportService
             $formatted_week_start = $week_start->format('F d');
             $formatted_week_end = $week_end->format('F d Y');
 
-            $table->addRow();
-
+             $table->addRow();
             $table->addCell(4500)->addText(
-                "Week of: {$formatted_week_start} to {$formatted_week_end}",
-                ['name' => 'Tahoma', 'size' => 11, 'underline' => 'single'],
+                "Name: {$report->user->name}",
+                ['name' => 'Tahoma', 'size' => 11, null],
                 ['alignment' => 'left']
             );
 
             $table->addCell(4500)->addText(
-                "Name: {$report->user->name}",
-                ['name' => 'Tahoma', 'size' => 11, 'underline' => 'single'],
+                "Track: {$report->workCategory->name}",
+                ['name' => 'Tahoma', 'size' => 11, null],
                 ['alignment' => 'right']
             );
+
+            $table->addRow();
+            $table->addCell(4500)->addText(
+                "Week of: {$formatted_week_start} to {$formatted_week_end}",
+                ['name' => 'Tahoma', 'size' => 11, null],
+                ['alignment' => 'left']
+            );
+
+
+           
             $section->addTextBreak(2);
 
             $entries = $report->entries;
@@ -177,7 +186,7 @@ class WeeklyReportsExportService
 
             // Save
             $safeName = preg_replace('/[^A-Za-z0-9 _-]/', '', $report->user->name);
-            $fileName = "Weekly_Report_{$report->id}_{$safeName}.docx";
+            $fileName = "Weekly_Report_{$report->journal_number}_{$safeName}.docx";
             $tempPath = storage_path("app/public/temp/{$fileName}");
 
             Storage::disk('public')->makeDirectory('temp');
