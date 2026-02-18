@@ -4,6 +4,7 @@ use App\Filament\Admin\Resources\WeeklyReports\Pages\ViewWeeklyReports;
 use App\Filament\Admin\Resources\WeeklyReports\WeeklyReportsResource;
 use App\Models\User;
 use App\Models\WeeklyReports;
+use App\Models\WorkCategory;
 use App\Services\Exports\WeeklyReportsExportService;
 //use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
@@ -23,14 +24,17 @@ it("Exports only certified reports into a zip", function () {
             "role" => "admin",
         ]);
 
+
     $certified = WeeklyReports::factory()
         ->count(2)
         ->create([
             "status" => "certified",
+                'work_category' => WorkCategory::first()?->id??WorkCategory::factory(),
         ]);
 
     WeeklyReports::factory()->create([
         "status" => "pending",
+        'work_category' => WorkCategory::first()?->id??WorkCategory::factory(),
     ]);
 
     $service = app(WeeklyReportsExportService::class);
@@ -56,6 +60,7 @@ it("exports a docx file when one file is exported", function () {
     $report = WeeklyReports::factory()->create([
         "status" => "certified",
         "certified_by" => $admin->id,
+        'work_category' => WorkCategory::first()?->id??WorkCategory::factory(),
     ]);
 
     $service = app(WeeklyReportsExportService::class);
