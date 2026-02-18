@@ -9,6 +9,8 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Shift;
+use Filament\Schemas\Components\Utilities\Get;
+
 
 class UserForm
 {
@@ -50,7 +52,7 @@ class UserForm
                             ->label('Shift')
                             ->options(fn() => Shift::pluck('name', 'id')->toArray())
                             ->searchable()
-                            ->required()
+                            ->required(fn (Get $get) => $get('role') === 'intern'),
                     ])
                     ->columnSpanFull()
                     ->columns(2),
