@@ -44,5 +44,16 @@ class ShiftSeeder extends Seeder
                 'session_2_end' => '22:00:00', // 10 PM
             ]
         );
+
+        // Graveyarad shift
+        Shift::updateOrCreate(
+            ['name' => 'Graveyard Shift'],
+            [
+                'session_1_start' => '04:00:00', // 4 AM
+                'session_1_end' => '08:00:00', // 8 AM
+                'session_2_start' => '09:00:00', // 9 AM
+                'session_2_end' => '13:00:00', // 1 PM
+            ]
+        );
     }
 }
