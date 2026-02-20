@@ -61,23 +61,21 @@ class WeeklyReportsForm
                             ->required(),
 
 
-                        Select::make('work_category')
+                            Select::make('work_category')
                             ->label('Work Category')
-                            ->options(fn() => WorkCategory::pluck('name', 'name')->toArray())
+                            ->options(fn() => WorkCategory::pluck('name', 'id')->toArray())
                             ->searchable()
                             ->required()
                             ->createOptionForm([
-                                TextInput::make('new_category')
-                                    ->label('Add New Category')
-                                    ->required(),
+                                TextInput::make('new_category')->label('Add New Category')->required(),
                             ])
                             ->createOptionUsing(function (array $data) {
                                 $category = WorkCategory::firstOrCreate([
                                     'name' => $data['new_category'],
                                     'created_by' => auth()->id(),
                                 ]);
-
-                                return $category->name; 
+                        
+                                return $category->id; // save the ID
                             })
                             ->placeholder('Select category'),
 

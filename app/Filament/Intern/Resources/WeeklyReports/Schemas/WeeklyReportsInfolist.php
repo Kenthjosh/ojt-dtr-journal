@@ -34,15 +34,10 @@ class WeeklyReportsInfolist
                         ->columnSpan(1)
                         ->label('Journal Number'),
                         
-                    TextEntry::make('work_category')
+                        TextEntry::make('work_category')
                         ->label('Work Category')
                         ->size(TextSize::Medium)
-                        ->formatStateUsing(fn ($state) => match($state) {
-                            'development' => 'Development',
-                            'designer' => 'Designer',
-                            'mixed' => 'Mixed',
-                            default => $state,
-                        }),
+                        ->formatStateUsing(fn ($state, $record) => $record->workCategory?->name ?? $state),
                 ])
                 ->columns(4),
 
