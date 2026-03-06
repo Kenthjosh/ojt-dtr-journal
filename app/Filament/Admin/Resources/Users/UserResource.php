@@ -6,6 +6,7 @@ use App\Filament\Admin\Resources\Users\Pages\CreateUser;
 use App\Filament\Admin\Resources\Users\Pages\EditUser;
 use App\Filament\Admin\Resources\Users\Pages\ListUsers;
 use App\Filament\Admin\Resources\Users\Pages\ViewUser;
+use App\Filament\Admin\Resources\Users\Pages\DisplayUserLogs;
 use App\Filament\Admin\Resources\Users\Schemas\UserForm;
 use App\Filament\Admin\Resources\Users\Schemas\UserInfolist;
 use App\Filament\Admin\Resources\Users\Tables\UsersTable;
@@ -55,49 +56,37 @@ class UserResource extends Resource
     /**
      * Map textual shift search to numeric shift_id
      */
-    public static function getGlobalSearchResults(string $search): Collection
-    {
-        $searchLower = strtolower($search);
+public static function getGlobalSearchResults(string $search): Collection
+{
+    return User::query()
+        ->with('shift') // eager load shift
+        ->where(function ($q) use ($search) {
+            $q->where('name', 'like', "%{$search}%")
+              ->orWhere('email', 'like', "%{$search}%")
+              ->orWhere('role', 'like', "%{$search}%")
+              ->orWhereHas('shift', function ($shiftQuery) use ($search) {
+                  $shiftQuery->where('name', 'like', "%{$search}%");
+              });
+        })
+        ->limit(50)
+        ->get()
+        ->map(function ($user) {
 
-        $shiftMap = [
-            "day shift" => 1,
-            "night shift" => 2,
-            "mid shift" => 3,
-        ];
-        $roleMap = [
-            "intern" => "Intern",
-            "admin" => "Admin",
-        ];
+            $shiftText = $user->shift->name ?? 'No Shift';
+            $roleText = ucfirst($user->role);
 
-        return User::query()
-            ->where(function ($q) use ($searchLower, $shiftMap) {
-                $q->where("name", "like", "%{$searchLower}%")
-                    ->orWhere("email", "like", "%{$searchLower}%")
-                    ->orWhere("role", "like", "%{$searchLower}%");
+            $title = "{$user->name} — {$shiftText} — {$roleText}";
+            $details = [$user->email];
 
-                if (isset($shiftMap[$searchLower])) {
-                    $q->orWhere("shift_id", $shiftMap[$searchLower]);
-                }
-            })
-            ->limit(50)
-            ->get()
-            ->map(function ($user) use ($shiftMap, $roleMap) {
-                $shiftText =
-                    array_search($user->shift_id, $shiftMap) ?: "Unknown Shift";
-                $roleText = $roleMap[$user->role] ?? "Unknown Role";
-
-                $title = $user->name . " — " . $shiftText . " — " . $roleText;
-                $details = [$user->email];
-
-                return new GlobalSearchResult(
-                    $title, // title
-                    "",
-                    $details,
-                    [],
-                    static::getUrl("view", ["record" => $user]), // URL
-                );
-            });
-    }
+            return new GlobalSearchResult(
+                $title,
+                '',
+                $details,
+                [],
+                static::getUrl('view', ['record' => $user]),
+            );
+        });
+}
 
     public static function getRelations(): array
     {
@@ -113,6 +102,7 @@ class UserResource extends Resource
             "create" => CreateUser::route("/create"),
             "view" => ViewUser::route("/{record}"),
             "edit" => EditUser::route("/{record}/edit"),
+            'activities' => DisplayUserLogs::route('/{record}/activities'),
         ];
     }
 }

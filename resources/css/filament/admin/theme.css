@@ -1,0 +1,23 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+@import '../../../../vendor/pxlrbt/filament-activity-log/resources/css/styles.css';
+
+@source '../../../../app/Filament/**/*';
+@source '../../../../resources/views/filament/**/*';
+
+@source '../../../../vendor/pxlrbt/filament-activity-log/resources/**/*';
+
+
+
+.fi-ta-table tbody tr:nth-child(even),
+.fi-ta-table tbody tr:nth-child(odd) {
+    background-color: transparent !important;
+}
+.fi-ta-table,
+.fi-ta-table td,
+.fi-ta-table th,
+.fi-section,
+.fi-in-text,
+.fi-ta-text {
+    font-size: 1.50 rem !important;
+    line-height: 3.5 !important;
+}

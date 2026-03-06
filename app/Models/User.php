@@ -8,9 +8,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class User extends Authenticatable implements FilamentUser
 {
+
+     use LogsActivity;
+
+    // Optional: specify which attributes to log
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll() // logs all attributes
+            ->useLogName('order'); // optional, categorize logs
+    }
+
     public function canAccessPanel(\Filament\Panel $panel): bool
     {
         return match ($panel->getId()) {
@@ -49,6 +62,7 @@ class User extends Authenticatable implements FilamentUser
         'password',
         'remember_token',
     ];
+
 
     /**
      * Get the attributes that should be cast.

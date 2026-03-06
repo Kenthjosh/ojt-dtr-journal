@@ -15,10 +15,16 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Filament\GlobalSearch\GlobalSearchResult;
 
 class WorkCategoryResource extends Resource
 {
     protected static ?int $navigationSort = 5;
+
+        public static function getGloballySearchableAttributes(): array
+        {
+            return ['name']; // ✅ correct column
+        }
 
     protected static ?string $model = WorkCategory::class;
     protected static string|\UnitEnum|null $navigationGroup = "Administration";

@@ -7,9 +7,29 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\WorkCategory;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class WeeklyReports extends Model
 {
+
+    use LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('weekly_report')
+            ->logOnly([
+                'journal_number',
+                'status',
+                'week_start',
+                'week_end',
+            ])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->setDescriptionForEvent(fn (string $eventName) => "Weekly report {$eventName}");
+    }
+
     /** @use HasFactory<\Database\Factories\WeeklyReportsFactory> */
     use HasFactory;
 

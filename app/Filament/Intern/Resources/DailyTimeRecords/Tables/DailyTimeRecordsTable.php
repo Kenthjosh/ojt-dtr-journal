@@ -23,8 +23,8 @@ class DailyTimeRecordsTable
                     ->dateTime('h:i A'),
                 TextColumn::make('type')
                     ->badge()
-                    ->formatStateUsing(fn ($state) => $state === 1 ? 'In' : 'Out')
-                    ->color(fn ($state) => $state === 1 ? 'success' : 'warning'),
+                    ->formatStateUsing(fn ($state) => $state === 'Time In' ? 'In' : 'Out')
+                    ->color(fn ($state) => $state === 'Time In' ? 'success' : 'warning'),
             ])->defaultSort('recorded_at', direction: 'desc')
             ->filters([
                 //

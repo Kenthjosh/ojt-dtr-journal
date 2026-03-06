@@ -29,7 +29,7 @@ class WorkCategoriesTable
             ->filters([
                 //
             ])
-            ->recordActions([ViewAction::make(), EditAction::make()])
+            ->recordActions([ViewAction::make()->color('info'), EditAction::make()])
             ->toolbarActions([
                 BulkActionGroup::make([DeleteBulkAction::make()]),
             ]);

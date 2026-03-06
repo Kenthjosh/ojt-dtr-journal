@@ -56,8 +56,9 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id("admin")
             ->path("/admin")
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->login()
-            ->spa()
+            //->spa()
 
             ->discoverResources(
                 in: app_path("Filament/Admin/Resources"),
