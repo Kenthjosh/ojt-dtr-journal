@@ -74,7 +74,7 @@ class WeeklyReportsForm
                                     'name' => $data['new_category'],
                                     'created_by' => auth()->id(),
                                 ]);
-                        
+
                                 return $category->id; // save the ID
                             })
                             ->placeholder('Select category'),
@@ -168,9 +168,10 @@ class WeeklyReportsForm
                     ->label(__('Sign here'))
                     ->required()
                     ->confirmable()
-                    ->backgroundColor('#1f2937')
+                    ->backgroundColor('#ffffff')
                     ->backgroundColorOnDark('#111827')
-                    ->penColor('#ffffff')
+                    ->exportBackgroundColor('#ffffff')
+                    ->penColor('#000000')
                     ->penColorOnDark('#ffffff')
                     ->exportPenColor('#000000')
                     ->dotSize(2.0)
