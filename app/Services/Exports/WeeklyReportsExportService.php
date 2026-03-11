@@ -83,7 +83,7 @@ class WeeklyReportsExportService
             );
 
 
-           
+
             $section->addTextBreak(2);
 
             $entries = $report->entries;
@@ -173,6 +173,7 @@ class WeeklyReportsExportService
             $section->addTextBreak(2);
 
             // SIGNATURE
+
             $signaturePath = $report->signature ? storage_path("app/private/{$report->signature}") : null;
 
             if ($signaturePath && file_exists($signaturePath)) {
