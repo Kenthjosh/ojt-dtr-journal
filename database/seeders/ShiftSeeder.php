@@ -7,52 +7,38 @@ use Illuminate\Database\Seeder;
 
 class ShiftSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Day Shift
+        // Day Shift: 8am-5pm (Break 12pm-1pm)
         Shift::updateOrCreate(
             ['name' => 'Day Shift'],
             [
-                'session_1_start' => '08:00:00', // 8 AM
-                'session_1_end' => '12:00:00', // 12 PM
-                'session_2_start' => '13:00:00', // 1 PM
-                'session_2_end' => '17:00:00', // 5 PM
+                'start_time'  => '08:00:00',
+                'end_time'    => '17:00:00',
+                'break_start' => '12:00:00',
+                'break_end'   => '13:00:00',
             ]
         );
 
-        // Night Shift
-        Shift::updateOrCreate(
-            ['name' => 'Night Shift'],
-            [
-                'session_1_start' => '20:00:00', // 8 PM
-                'session_1_end' => '00:00:00', // Midnight
-                'session_2_start' => '01:00:00', // 1 AM
-                'session_2_end' => '05:00:00', // 5 AM
-            ]
-        );
-
-        // Mid Shift
-        Shift::updateOrCreate(
-            ['name' => 'Mid Shift'],
-            [
-                'session_1_start' => '13:00:00', // 1 PM
-                'session_1_end' => '18:00:00', // 6 PM
-                'session_2_start' => '19:00:00', // 7 PM
-                'session_2_end' => '22:00:00', // 10 PM
-            ]
-        );
-
-        // Graveyarad shift
+        // Graveyard Shift: 4am-1pm (Break 7am-8am)
         Shift::updateOrCreate(
             ['name' => 'Graveyard Shift'],
             [
-                'session_1_start' => '04:00:00', // 4 AM
-                'session_1_end' => '08:00:00', // 8 AM
-                'session_2_start' => '09:00:00', // 9 AM
-                'session_2_end' => '13:00:00', // 1 PM
+                'start_time'  => '04:00:00',
+                'end_time'    => '13:00:00',
+                'break_start' => '07:00:00',
+                'break_end'   => '08:00:00',
+            ]
+        );
+
+        // Mid Shift: 1pm-10pm (Break 6pm-7pm)
+        Shift::updateOrCreate(
+            ['name' => 'Mid Shift'],
+            [
+                'start_time'  => '13:00:00',
+                'end_time'    => '22:00:00',
+                'break_start' => '18:00:00',
+                'break_end'   => '19:00:00',
             ]
         );
     }
