@@ -14,17 +14,28 @@ class DailyTimeRecordsTable
     {
         return $table
             ->columns([
-                TextColumn::make('created_at')
+                TextColumn::make('work_date')
                     ->label('Date')
                     ->date()
                     ->sortable(),
+
                 TextColumn::make('recorded_at')
                     ->label('Time')
-                    ->dateTime('h:i A'),
+                    ->dateTime('h:i A')
+                    ->sortable(),
+
                 TextColumn::make('type')
                     ->badge()
-                    ->formatStateUsing(fn ($state) => $state === 'Time In' ? 'In' : 'Out')
-                    ->color(fn ($state) => $state === 'Time In' ? 'success' : 'warning'),
+                    // We check for the LABEL because your DtrTypeCast has already transformed 1 into "Time In"
+                    ->formatStateUsing(fn($state) => $state === 'Time In' ? 'In' : 'Out')
+                    ->color(fn($state) => $state === 'Time In' ? 'success' : 'info'),
+
+                TextColumn::make('work_minutes')
+                    ->label('Minutes Earned')
+                    // Check the label to decide whether to show minutes
+                    ->formatStateUsing(fn($state, $record) => $record->type === 'Time Out' ? "{$state} mins" : '-')
+                    ->color(fn($record) => $record->type === 'Time Out' ? 'success' : null)
+                    ->alignRight(),
             ])->defaultSort('recorded_at', direction: 'desc')
             ->filters([
                 //

@@ -9,41 +9,42 @@ use Illuminate\Support\Facades\Auth;
 
 class DtrStatsWidget extends StatsOverviewWidget
 {
+    protected $listeners = ['refreshWidgets' => '$refresh'];
+
     protected function getStats(): array
     {
         $userId = Auth::id();
+        $targetMinutes = 729 * 60; // 43,740 total minutes
 
         $stats = DtrLog::where('user_id', $userId)
-            ->selectRaw('SUM(work_minutes) as total_work, SUM(late_minutes) as total_late')
+            ->selectRaw('COALESCE(SUM(work_minutes), 0) as total_work')
             ->first();
+
+        $totalRendered = (int) $stats->total_work;
+        $remaining = max(0, $targetMinutes - $totalRendered);
 
         $totalDays = DtrLog::where('user_id', $userId)
             ->distinct('work_date')
             ->count('work_date');
 
         return [
-            Stat::make('Total Hours', $this->formatTime($stats->total_work ?? 0))
-                ->description('Credited work time')
+            Stat::make('Total Hours Rendered', $this->formatTime($totalRendered))
+                ->description('Accumulated credited time')
                 ->color('success'),
 
-            Stat::make('Total Days', $totalDays)
-                ->description('Days with recorded logs'),
+            Stat::make('Remaining Hours', $this->formatTime($remaining))
+                ->description('Countdown to 729h target')
+                ->color($remaining > 0 ? 'warning' : 'success')
+                ->chart([$remaining, $remaining * 0.8, $remaining * 0.5, 0]),
 
-            Stat::make('Overall Late', $this->formatTime($stats->total_late ?? 0))
-                ->description('Total tardiness recorded')
-                ->color('danger'),
+            Stat::make('Total Days Worked', (string) $totalDays)
+                ->description('Unique business days recorded'),
         ];
     }
 
-    // function to format time
     private function formatTime(int $totalMinutes): string
     {
-        // Use abs() to convert negative to positive
-        $totalMinutes = abs($totalMinutes);
-
-        if ($totalMinutes === 0) {
-            return '0';
-        }
+        if ($totalMinutes <= 0) return '0m';
 
         $hours = floor($totalMinutes / 60);
         $mins = $totalMinutes % 60;
