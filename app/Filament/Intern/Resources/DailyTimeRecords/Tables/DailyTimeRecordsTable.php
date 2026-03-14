@@ -31,11 +31,24 @@ class DailyTimeRecordsTable
                     ->color(fn($state) => $state === 'Time In' ? 'success' : 'info'),
 
                 TextColumn::make('work_minutes')
-                    ->label('Minutes Earned')
-                    // Check the label to decide whether to show minutes
-                    ->formatStateUsing(fn($state, $record) => $record->type === 'Time Out' ? "{$state} mins" : '-')
-                    ->color(fn($record) => $record->type === 'Time Out' ? 'success' : null)
-                    ->alignRight(),
+                    ->label('Hours Rendered')
+                    ->formatStateUsing(function ($state, $record) {
+
+                        if ($record->type !== 'Time Out') {
+                            return '-';
+                        }
+
+                        $hours = floor($state / 60);
+                        $minutes = $state % 60;
+
+                        if ($hours > 0) {
+                            return "{$hours}h {$minutes}m";
+                        }
+
+                        return "{$minutes}m";
+                    })
+                    ->color(fn ($record) => $record->type === 'Time Out' ? 'success' : null)
+                    ->alignCenter(),
             ])->defaultSort('recorded_at', direction: 'desc')
             ->filters([
                 //

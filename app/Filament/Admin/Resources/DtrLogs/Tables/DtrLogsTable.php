@@ -2,6 +2,8 @@
 
 namespace App\Filament\Admin\Resources\DtrLogs\Tables;
 
+use App\Filament\Exports\DailyTimeRecordsExporter;
+use Filament\Actions\ExportBulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -71,7 +73,13 @@ class DtrLogsTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    ExportBulkAction::make('export')
+                        ->label('Export Selected')
+                        ->icon('heroicon-o-archive-box-arrow-down')
+                        ->color('success')
+                        ->exporter(DailyTimeRecordsExporter::class)
+                        ->maxRows(500)
+                        ->columnMapping(false),
                 ]),
             ]);
     }
