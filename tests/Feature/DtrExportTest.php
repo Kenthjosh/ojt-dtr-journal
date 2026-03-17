@@ -1,6 +1,6 @@
 <?php
 
-use App\Filament\Admin\Resources\DailyTimeRecords\Pages\ListDailyTimeRecords;
+use App\Filament\Admin\Resources\DtrLogs\Pages\ListDtrLogs;
 use App\Filament\Exports\DailyTimeRecordsExporter;
 use App\Models\DtrLog;
 use App\Models\User;
@@ -20,7 +20,7 @@ it("creates an export record for daily time records", function () {
             "user_id" => $user->id,
             "work_date" => now(),
             "recorded_at" => now(),
-            "type" => 1,
+            "type" => "Time In",
         ],
     );
 
@@ -47,7 +47,7 @@ it(
 
         $this->actingAs($user);
 
-        Livewire::test(ListDailyTimeRecords::class)->callTableBulkAction(
+        Livewire::test(ListDtrLogs::class)->callTableBulkAction(
             ExportBulkAction::class,
             ["export", 1, 2, 3],
         );
@@ -63,7 +63,7 @@ it(
 
         $this->actingAs($user);
 
-        Livewire::test(ListDailyTimeRecords::class)->callTableBulkAction(
+        Livewire::test(ListDtrLogs::class)->callTableBulkAction(
             ExportBulkAction::class,
             ["export", 1, 2, 3],
         );
