@@ -37,7 +37,7 @@ class DailyTimeRecordsExporter extends Exporter
                 }),
             ExportColumn::make('type')
                 ->label('Type')
-                ->formatStateUsing(fn ($state) => $state === 1 ? '[IN]' : '[OUT]'),
+                ->formatStateUsing(fn ($state) => $state === 'Time In' ? '[IN]' : '[OUT]'),
         ];
     }
 
