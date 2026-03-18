@@ -42,7 +42,7 @@ class WeeklyReportsInfolist
                 ->columns(4),
 
             Section::make('Week Focus')
-                ->description('If you had more time, what would you improve or change?')
+                ->description('What was your main focus this week?, What skill or concept were you trying to improve?')
                 ->schema([
                     TextEntry::make('entries.week_focus')
                         ->disablelabel()
