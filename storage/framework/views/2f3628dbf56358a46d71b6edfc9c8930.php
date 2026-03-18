@@ -1,1 +1,0 @@
-<?php echo e($livewireKey); ?>.display-text<?php /**PATH C:\Users\Administrator\Herd\ojt-dtr-journal\storage\framework\views/56dd8f189d00a159cae8f632745ff332.blade.php ENDPATH**/ ?>
